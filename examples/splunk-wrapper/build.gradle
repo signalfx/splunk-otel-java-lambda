@@ -1,9 +1,14 @@
 plugins {
-  id "java"
+  id "java-library"
 }
 
 group = 'com.splunk.public'
 description = "Splunk OTEL Java Lambda Wrapper Examples - splunk wrapper direct usage"
+
+java {
+  sourceCompatibility = JavaVersion.VERSION_1_8
+  targetCompatibility = JavaVersion.VERSION_1_8
+}
 
 repositories {
   jcenter()
@@ -15,9 +20,8 @@ repositories {
 }
 
 dependencies {
-
-  compile project(':functions')
-  compile('com.splunk.public:otel-lambda-wrapper:1.0.0')
+  api project(':functions')
+  implementation('com.splunk.public:otel-lambda-wrapper:1.0.0')
 }
 
 task buildZip(type: Zip) {

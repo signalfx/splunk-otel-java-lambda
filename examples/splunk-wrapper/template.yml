@@ -26,11 +26,16 @@ Resources:
           OTEL_LAMBDA_LOG_LEVEL: DEBUG
           OTEL_LIB_LOG_LEVEL: FINEST
       Events:
-        RequestApiGatewayWrapperFunctionApiCall:
+        HelloAll:
           Type: Api
           Properties:
             Path: /hello
             Method: post
+        HelloSingle:
+          Type: Api
+          Properties:
+            Path: /hello/{helloId}
+            Method: get
 
   # API Gateway streaming wrapper (with HTTP propagation)
   ApiGatewayRequestStreamFunction:
@@ -50,6 +55,12 @@ Resources:
           OTEL_LAMBDA_LOG_LEVEL: DEBUG
           OTEL_LIB_LOG_LEVEL: FINEST
       Events:
+        # endpoint with outbound propagation
+        AnimalsList:
+          Type: Api
+          Properties:
+            Path: /animals
+            Method: get
         PetsList:
           Type: Api
           Properties:

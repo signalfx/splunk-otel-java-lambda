@@ -30,6 +30,7 @@ Configuration section and examples show how to set desired propagator.
 
 ### Outbound context propagation
 
+Manual outbound trace context propagation is documented [here](outbound-context-propagation.md)
 
 ## Usage step 1: Install via Maven
 
