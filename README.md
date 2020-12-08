@@ -6,8 +6,8 @@ The Splunk Lambda wrapper uses b3 context propagation and a jaeger-thrift export
 
 There are two options to deploy the Splunk Lambda wrapper:
 
-- Use an existing Lambda function handler. There's support for regular and streaming handlers.
-- Create a Lambda layer. 
+- Add a Lambda function handler
+- Create a Lambda layer
 
 Splunk provides a Serverless Application Model (SAM) template for deploying the Lambda wrapper with a Lambda handler or a Lambda layer. If you choose deploy the Lambda wrapper with a layer, Splunk also hosts a layer in AWS.
 
@@ -100,6 +100,6 @@ Following variables can be used to control logging:
   
 ## License and versioning
 
-The Splunk OpenTelemetry Java Lambda Wrapper uses the [OpenTelemetry Instrumentation for Java](https://github.com/open-telemetry/opentelemetry-java-instrumentation), which is released under the terms of the Apache Software License version 2.0. For more information, see the license file.
+The Splunk OpenTelemetry Java Lambda Wrapper uses the [OpenTelemetry Instrumentation for Java](https://github.com/open-telemetry/opentelemetry-java-instrumentation), which is released under the terms of the Apache Software License version 2.0. For more information, see the [license](./LICENSE) file.
 
 
