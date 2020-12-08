@@ -55,7 +55,7 @@ public class Configurator {
         otel.setLevel(getOtelLibLogLevel());
         otel.addHandler(consoleHandler);
 
-        log.info("Configured OTEL lib log level: "+otel.getLevel());
+        log.info("Configured OTEL lib log level: {}", otel.getLevel());
     }
 
     private static Level getOtelLibLogLevel() {

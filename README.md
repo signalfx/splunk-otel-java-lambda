@@ -20,6 +20,17 @@ Splunk provides extensions to OTEL wrappers, allowing for cheap adoption of trac
 - `com.splunk.support.lambda.TracingRequestStreamWrapper` - for wrapping streaming handlers (implementing `RequestStreamHandler`), enabling HTTP context propagation for HTTP requests 
 - `com.splunk.support.lambda.TracingRequestWrapper` - for wrapping regular handlers (implementing `RequestHandler`)
 
+### Inbound context propagation
+
+HTTP headers based context propagation is supported for API Gateway (HTTP) requests. In order to enabled it, please wrap your lambda with either `TracingRequestStreamWrapper` or `TracingRequestApiGatewayWrapper`
+
+Supported propagators are documented here: https://github.com/open-telemetry/opentelemetry-java/tree/master/extensions/trace_propagators
+
+Configuration section and examples show how to set desired propagator.
+
+### Outbound context propagation
+
+
 ## Usage step 1: Install via Maven
 
 ```
@@ -84,4 +95,9 @@ At a high level, to reduce the size of deployments with AWS Lambda layers, you n
 - Trace exporters and propagators as supported by [OTEL Java instrumentation](https://github.com/open-telemetry/opentelemetry-java-instrumentation) 
 - Information on attaching [an AWS layer to a Lambda](https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html#configuration-layers-using).
 
-(c) Copyright 2020 Splunk, Inc. 
+# License and versioning
+
+The Splunk distribution of OpenTelemetry Lambda Java Wrappers uses the [OpenTelemetry Java Instrumentation
+project](https://github.com/open-telemetry/opentelemetry-java-instrumentation).
+It is released under the terms of the Apache Software License version 2.0. See
+[the license file](./LICENSE) for more details.

@@ -14,7 +14,7 @@ import org.glassfish.jersey.server.ResourceConfig;
 public class ApiGatewayRequestStreamFunction implements RequestStreamHandler {
 
     private static final ResourceConfig jerseyApplication = new ResourceConfig()
-            .packages("com.amazonaws.serverless.sample.jersey")
+            .packages("com.splunk.support.lambda.examples")
             .register(JacksonFeature.class);
     private static final JerseyLambdaContainerHandler<AwsProxyRequest, AwsProxyResponse> handler
             = JerseyLambdaContainerHandler.getAwsProxyHandler(jerseyApplication);
