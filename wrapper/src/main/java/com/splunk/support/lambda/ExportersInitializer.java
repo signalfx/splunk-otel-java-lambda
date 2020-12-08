@@ -36,7 +36,7 @@ public class ExportersInitializer {
 
     static synchronized void initializeExporters(List<String> exporters, Properties config) {
 
-        log.debug("Installing exporters: "+exporters);
+        log.debug("Installing exporters: {}", exporters);
         for (String exporterName : exporters) {
             installExporter(exporterName, config, getSpanExporter(exporterName, config));
         }

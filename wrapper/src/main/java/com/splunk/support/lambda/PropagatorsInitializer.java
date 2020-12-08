@@ -51,7 +51,7 @@ class PropagatorsInitializer {
 
   static void initializePropagators(List<String> propagators) {
 
-    log.debug("Configuring propagators: "+propagators);
+    log.debug("Configuring propagators: {}", propagators);
 
     DefaultContextPropagators.Builder propagatorsBuilder = DefaultContextPropagators.builder();
     List<TextMapPropagator> textPropagators = new ArrayList<>(propagators.size());

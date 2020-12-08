@@ -22,9 +22,13 @@ import javax.ws.rs.core.MediaType;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.UUID;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Path("/pets")
 public class PetsController {
+
+    private static final Logger log = LoggerFactory.getLogger(PetsController.class);
 
     @Inject
     HttpServletRequest request;
@@ -45,11 +49,9 @@ public class PetsController {
             newPet.setBreed(PetData.getRandomBreed());
             newPet.setDateOfBirth(PetData.getRandomDoB());
             outputPets[i] = newPet;
-            // mock call
+            // mock internal call
             String callUrl = request.getRequestURL().substring(0, request.getRequestURL().lastIndexOf("/"));
-
             call(callUrl+"/Prod/pets/"+newPet.getId());
-
         }
         return outputPets;
     }
@@ -58,17 +60,17 @@ public class PetsController {
 
         try {
             URL obj = new URL(address);
-            HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-            con.setRequestMethod("GET");
-            System.out.println("Calling: "+address+". Got="+con.getResponseCode());
+            HttpURLConnection urlConnection = (HttpURLConnection) obj.openConnection();
+            urlConnection.setRequestMethod("GET");
+            log.info("Executed call to: {}. Result code: {}", address, urlConnection.getResponseCode());
         } catch (Exception e) {
-            System.err.println("Calling: "+address+". ERROR="+e);
+            log.error("Error calling: "+address, e);
         }
     }
 
     @Path("/{petId}") @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Pet listPets() {
+    public Pet getById() {
         Pet newPet = new Pet();
         newPet.setId(UUID.randomUUID().toString());
         newPet.setBreed(PetData.getRandomBreed());

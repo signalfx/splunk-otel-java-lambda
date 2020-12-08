@@ -100,4 +100,6 @@ Following variables can be used to control logging:
   
 ## License and versioning
 
-The Splunk OpenTelemetry Java Lambda Wrapper is released under the terms of the Apache Software License version 2.0. For more information, see the license file.
+The Splunk OpenTelemetry Java Lambda Wrapper uses the [OpenTelemetry Instrumentation for Java](https://github.com/open-telemetry/opentelemetry-java-instrumentation), which is released under the terms of the Apache Software License version 2.0. For more information, see the license file.
+
+
