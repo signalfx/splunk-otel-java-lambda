@@ -1,0 +1,25 @@
+plugins {
+  id "java"
+}
+group = 'com.splunk.public'
+description = "Splunk OTEL Java Lambda Wrapper Examples - layer usage"
+
+repositories {
+  jcenter()
+  mavenLocal()
+  mavenCentral()
+}
+
+dependencies {
+  compile project(':functions')
+}
+
+task buildZip(type: Zip) {
+  from compileJava
+  from processResources
+  into('lib') {
+    from configurations.compileClasspath
+  }
+}
+
+build.dependsOn buildZip

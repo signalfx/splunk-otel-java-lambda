@@ -1,0 +1,103 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Example lambdas instrumented using different handlers and wrappers
+
+Globals:
+  Api:
+    EndpointConfiguration: REGIONAL
+
+Resources:
+
+  # API gateway wrapper (with HTTP propagation)
+  ApiGatewayRequestFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: ApiGatewayRequestFunction
+      Handler: com.splunk.support.lambda.TracingRequestApiGatewayWrapper
+      Runtime: java11
+      CodeUri: .
+      MemorySize: 512
+      Policies: AWSLambdaBasicExecutionRole
+      Timeout: 60
+      Environment:
+        Variables:
+          OTEL_LAMBDA_HANDLER: com.splunk.support.lambda.examples.ApiGatewayRequestFunction::handleRequest
+          OTEL_EXPORTER: logging
+          OTEL_LAMBDA_LOG_LEVEL: DEBUG
+          OTEL_LIB_LOG_LEVEL: FINEST
+      Events:
+        RequestApiGatewayWrapperFunctionApiCall:
+          Type: Api
+          Properties:
+            Path: /hello
+            Method: post
+
+  # API Gateway streaming wrapper (with HTTP propagation)
+  ApiGatewayRequestStreamFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: ApiGatewayRequestStreamFunction
+      Handler: com.splunk.support.lambda.TracingRequestStreamWrapper
+      Runtime: java11
+      CodeUri: .
+      MemorySize: 512
+      Policies: AWSLambdaBasicExecutionRole
+      Timeout: 60
+      Environment:
+        Variables:
+          OTEL_LAMBDA_HANDLER: com.splunk.support.lambda.examples.ApiGatewayRequestStreamFunction::handleRequest
+          OTEL_EXPORTER: logging
+          OTEL_LAMBDA_LOG_LEVEL: DEBUG
+          OTEL_LIB_LOG_LEVEL: FINEST
+      Events:
+        PetsList:
+          Type: Api
+          Properties:
+            Path: /pets
+            Method: get
+        GetPet:
+          Type: Api
+          Properties:
+            Path: /pets/{petId}
+            Method: get
+
+  # Event based wrapper (no HTTP propagation)
+  RequestFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: RequestFunction
+      Handler: com.splunk.support.lambda.TracingRequestWrapper::handleRequest
+      Runtime: java11
+      CodeUri: .
+      MemorySize: 512
+      Policies: AWSLambdaBasicExecutionRole
+      Timeout: 60
+      Environment:
+        Variables:
+          OTEL_LAMBDA_HANDLER: com.splunk.support.lambda.examples.RequestFunction::handleRequest
+          OTEL_EXPORTER: logging
+          OTEL_LAMBDA_LOG_LEVEL: DEBUG
+          OTEL_LIB_LOG_LEVEL: FINEST
+
+  # Event based streaming wrapper (no HTTP propagation)
+  RequestStreamFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: RequestStreamFunction
+      Handler: com.splunk.support.lambda.TracingRequestStreamWrapper
+      Runtime: java11
+      CodeUri: .
+      MemorySize: 512
+      Policies: AWSLambdaBasicExecutionRole
+      Timeout: 60
+      Environment:
+        Variables:
+          OTEL_LAMBDA_HANDLER: com.splunk.support.lambda.examples.RequestStreamFunction::handleRequest
+          OTEL_EXPORTER: logging
+          OTEL_LAMBDA_LOG_LEVEL: DEBUG
+          OTEL_LIB_LOG_LEVEL: FINEST
+
+Outputs:
+  LambdaTestApi:
+    Description: URL for application
+    Value: !Sub 'https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/'

@@ -1,0 +1,2 @@
+group = 'com.splunk.public'
+description = "Splunk OTEL Java Lambda Wrapper Examples"

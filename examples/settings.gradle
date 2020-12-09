@@ -1,0 +1,7 @@
+plugins {
+    id 'com.gradle.enterprise' version '3.5'
+}
+
+rootProject.name = 'splunk-otel-lambda-wrapper-examples'
+
+include ('functions', 'otel-wrapper', 'splunk-layer', 'splunk-wrapper')

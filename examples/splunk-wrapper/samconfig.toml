@@ -1,0 +1,8 @@
+version = 0.1
+[default]
+[default.deploy]
+[default.deploy.parameters]
+stack_name = "lambda-wrappers-demo"
+region = "us-east-2"
+confirm_changeset = false
+capabilities = "CAPABILITY_IAM"

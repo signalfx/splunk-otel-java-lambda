@@ -1,0 +1,31 @@
+plugins {
+  id "java"
+}
+
+group = 'com.splunk.public'
+description = "Splunk OTEL Java Lambda Wrapper Examples - splunk wrapper direct usage"
+
+repositories {
+  jcenter()
+  mavenLocal()
+  mavenCentral()
+  maven {
+    url "https://dl.bintray.com/open-telemetry/maven"
+  }
+}
+
+dependencies {
+
+  compile project(':functions')
+  compile('com.splunk.public:otel-lambda-wrapper:1.0.0')
+}
+
+task buildZip(type: Zip) {
+  from compileJava
+  from processResources
+  into('lib') {
+    from configurations.compileClasspath
+  }
+}
+
+build.dependsOn buildZip
