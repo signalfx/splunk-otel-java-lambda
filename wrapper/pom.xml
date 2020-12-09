@@ -14,8 +14,8 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <otel.instrumentation.version>0.11.0</otel.instrumentation.version>
-        <otel.version>0.11.0</otel.version>
+        <otel.instrumentation.version>0.12.0</otel.instrumentation.version>
+        <otel.version>0.12.0</otel.version>
     </properties>
 
     <licenses>
@@ -119,6 +119,16 @@
         <dependency>
             <groupId>io.opentelemetry</groupId>
             <artifactId>opentelemetry-extension-trace-propagators</artifactId>
+            <version>${otel.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.opentelemetry</groupId>
+            <artifactId>opentelemetry-sdk-extension-resources</artifactId>
+            <version>${otel.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.opentelemetry</groupId>
+            <artifactId>opentelemetry-sdk-extension-aws</artifactId>
             <version>${otel.version}</version>
         </dependency>
         <!--
