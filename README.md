@@ -1,18 +1,21 @@
 # Splunk OpenTelemetry Java Lambda Wrapper
 
 The Splunk OpenTelemetry Java Lambda Wrapper is a modified version of the
-[OpenTelemetry AWS Lambda Instrumentation](https://github.com/open-telemetry/opentelemetry-java-instrumentation/tree/master/instrumentation/aws-lambda-1.0/library)
+wrappers in the [OpenTelemetry AWS Lambda Instrumentation](https://github.com/open-telemetry/opentelemetry-java-instrumentation/tree/master/instrumentation/aws-lambda-1.0/library)
 that enables you to export spans from an AWS Lambda function with Java to
 Splunk APM without any code changes to your Lambda functions.
 
-The Splunk Lambda wrapper uses b3 context propagation and a jaeger-thrift
-exporter to send trace metadata to Splunk APM. If needed, you can customize
-context propagation and the exporter when you deploy the wrapper.
+The Splunk Lambda wrapper uses B3 context propagation and a jaeger-thrift
+exporter by default to send trace metadata to Splunk APM. If needed, you can
+customize context propagation and the exporter when you deploy the wrapper.
 
-There are two options to deploy the Splunk Lambda wrapper:
+This project contains the custom wrapper code in the [wrapper](https://github.com/signalfx/splunk-otel-java-lambda-wrapper/tree/main/wrapper)
+directory and examples in the [examples](https://github.com/signalfx/splunk-otel-java-lambda-wrapper/tree/main/examples) directory.
 
-- Add a Lambda function handler
-- Use a Lambda layer
+There are two options to use the Splunk Lambda wrapper:
+
+- Use a Lambda function wrapper directly
+- Use a Lambda layer that Splunk hosts
 
 Splunk provides a Serverless Application Model (SAM) template for deploying
 the Lambda wrapper with a Lambda handler or a Lambda layer. If you choose
