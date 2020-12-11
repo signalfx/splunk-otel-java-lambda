@@ -1,10 +1,13 @@
 # Demo lambdas for tracing wrapper / handler testing
 
 Documents how to use Splunk lambda wrappers directly (without layer). 
-Most importantly shows that no custom code is needed, as configuration can be set via env properties. in this example, following values are configured:
+
+Most importantly shows that no custom code is needed, as configuration can be set via env properties. In this example, following values are configured:
 - B3 inbound propagation
 - finest / debug logging
 - logging span exporter (ie the spans will be captured in CW logs)
+
+One of the examples shows also how to use the `PropagationHelper` in order to get outbound context (trace) propagation.
 
 ## Pre-requisites
 * [AWS CLI](https://aws.amazon.com/cli/)
@@ -47,6 +50,13 @@ Example call: `curl -v -H "X-B3-TraceId: 4fd0b6131f19f39af59518d127b0cafe" -H "X
 Wrapped function: `ApiGatewayRequestStreamFunction`
 
 Example call: `curl -v -H "X-B3-TraceId: 4fd0b6131f19f39af59518d127b0cafe" -H "X-B3-SpanId: 0000000000000456" -H "X-B3-Sampled: 1" https://DEPLOYMENT_ID.execute-api.us-east-2.amazonaws.com/Prod/pets`
+
+### API gateway stream wrapper with outbound trace propagation (animals API) 
+Wrapped function: `ApiGatewayRequestStreamFunction`
+
+Example call: `curl -v -H "X-B3-TraceId: 4fd0b6131f19f39af59518d127b0cafe" -H "X-B3-SpanId: 0000000000000456" -H "X-B3-Sampled: 1" https://DEPLOYMENT_ID.execute-api.us-east-2.amazonaws.com/Prod/animals`
+
+Please have a look at the `AnimalsController` class and especially `addPropagationHeaders` method to review `PropagationHelper` use.
 
 ### Event based non-stream wrapper (String-typed lambda) 
 Wrapped function: `RequestFunction`
