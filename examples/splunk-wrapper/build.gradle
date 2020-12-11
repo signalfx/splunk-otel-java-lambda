@@ -21,7 +21,7 @@ repositories {
 
 dependencies {
   api project(':functions')
-  implementation('com.signalfx:otel-java-lambda-wrapper:1.0.0')
+  implementation('com.signalfx.public:otel-java-lambda-wrapper:0.0.1')
 }
 
 task buildZip(type: Zip) {
