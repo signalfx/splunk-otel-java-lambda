@@ -21,7 +21,7 @@ repositories {
 
 dependencies {
   api project(':functions')
-  implementation('com.splunk.public:otel-lambda-wrapper:1.0.0')
+  implementation('com.signalfx:otel-java-lambda-wrapper:1.0.0')
 }
 
 task buildZip(type: Zip) {
