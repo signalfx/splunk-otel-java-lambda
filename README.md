@@ -5,9 +5,13 @@ wrappers in the [OpenTelemetry AWS Lambda Instrumentation](https://github.com/op
 that enables you to export spans from an AWS Lambda function with Java to
 Splunk APM without any code changes to your Lambda functions.
 
+Current release uses `OpenTelemetry AWS Lambda Instrumentation` version `0.12.0`.
+
 The Splunk Lambda wrapper uses B3 context propagation and a jaeger-thrift
 exporter by default to send trace metadata to Splunk APM. If needed, you can
 customize context propagation and the exporter when you deploy the wrapper.
+
+Outbound context propagation for lambdas instrumented with this wrapper can be easily implemented. Please have a look [here](outbound-context-propagation.md)
 
 This project contains the custom wrapper code in the [wrapper](https://github.com/signalfx/splunk-otel-java-lambda-wrapper/tree/main/wrapper)
 directory and examples in the [examples](https://github.com/signalfx/splunk-otel-java-lambda-wrapper/tree/main/examples) directory.
