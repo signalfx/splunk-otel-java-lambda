@@ -17,15 +17,13 @@ package com.splunk.support.lambda;
 
 import io.opentelemetry.api.OpenTelemetry;
 import io.opentelemetry.api.trace.TracerProvider;
-import io.opentelemetry.api.trace.propagation.HttpTraceContext;
+import io.opentelemetry.api.trace.propagation.W3CTraceContextPropagator;
 import io.opentelemetry.context.propagation.ContextPropagators;
-import io.opentelemetry.context.propagation.DefaultContextPropagators;
 import io.opentelemetry.context.propagation.TextMapPropagator;
 import io.opentelemetry.extension.trace.propagation.AwsXRayPropagator;
 import io.opentelemetry.extension.trace.propagation.B3Propagator;
 import io.opentelemetry.extension.trace.propagation.JaegerPropagator;
 import io.opentelemetry.extension.trace.propagation.OtTracerPropagator;
-import io.opentelemetry.extension.trace.propagation.TraceMultiPropagator;
 import io.opentelemetry.sdk.OpenTelemetrySdk;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -41,7 +39,7 @@ class PropagatorsInitializer {
   
   private static final Map<String, TextMapPropagator> TEXTMAP_PROPAGATORS = new HashMap<>();
   static {
-          TEXTMAP_PROPAGATORS.put("tracecontext", HttpTraceContext.getInstance());
+          TEXTMAP_PROPAGATORS.put("tracecontext", W3CTraceContextPropagator.getInstance());
           TEXTMAP_PROPAGATORS.put("b3", B3Propagator.getInstance());
           TEXTMAP_PROPAGATORS.put("b3multi", B3Propagator.builder().injectMultipleHeaders().build());
           TEXTMAP_PROPAGATORS.put("jaeger", JaegerPropagator.getInstance());
@@ -53,7 +51,6 @@ class PropagatorsInitializer {
 
     log.debug("Configuring propagators: {}", propagators);
 
-    DefaultContextPropagators.Builder propagatorsBuilder = DefaultContextPropagators.builder();
     List<TextMapPropagator> textPropagators = new ArrayList<>(propagators.size());
     for (String propagatorId : propagators) {
       TextMapPropagator textPropagator = TEXTMAP_PROPAGATORS.get(propagatorId.trim().toLowerCase());
@@ -61,17 +58,14 @@ class PropagatorsInitializer {
         textPropagators.add(textPropagator);
       }
     }
+    ContextPropagators contextPropagators = ContextPropagators.noop();
     if (textPropagators.size() > 1) {
-      TraceMultiPropagator.Builder traceMultiPropagatorBuilder = TraceMultiPropagator.builder();
-      for (TextMapPropagator textPropagator : textPropagators) {
-        traceMultiPropagatorBuilder.addPropagator(textPropagator);
-      }
-      propagatorsBuilder.addTextMapPropagator(traceMultiPropagatorBuilder.build());
+      contextPropagators = ContextPropagators.create(TextMapPropagator.composite(textPropagators));
     } else if (textPropagators.size() == 1) {
-      propagatorsBuilder.addTextMapPropagator(textPropagators.get(0));
+      contextPropagators = ContextPropagators.create(textPropagators.get(0));
     }
     // Register it in the global propagators:
-    setGlobalPropagators(propagatorsBuilder.build());
+    setGlobalPropagators(contextPropagators);
   }
 
   public static void setGlobalPropagators(ContextPropagators propagators) {

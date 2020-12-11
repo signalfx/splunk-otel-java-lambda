@@ -19,6 +19,7 @@ import static com.splunk.support.lambda.ExportersInitializer.initializeExporters
 import static com.splunk.support.lambda.PropagatorsInitializer.initializePropagators;
 
 import io.opentelemetry.instrumentation.api.config.Config;
+import io.opentelemetry.instrumentation.api.config.ConfigBuilder;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
 import java.util.logging.SimpleFormatter;
@@ -35,9 +36,20 @@ public class Configurator {
 
     static final String OTEL_LIB_LOG_LEVEL = "OTEL_LIB_LOG_LEVEL";
 
+    // Disable all non-lambda AWS resources to make startup faster
+    private static final String DISABLED_RESOURCE_PROVIDERS =
+            String.join(",",
+                    "io.opentelemetry.sdk.extension.aws.resource.BeanstalkResource",
+                    "io.opentelemetry.sdk.extension.aws.resource.Ec2Resource",
+                    "io.opentelemetry.sdk.extension.aws.resource.EcsResource",
+                    "io.opentelemetry.sdk.extension.aws.resource.EksResource");
+
     public static void configure() {
         setDefaultValues();
-        Config.internalInitializeConfig(new ConfigurationBuilder().build());
+        Config.internalInitializeConfig(new ConfigBuilder()
+                .readEnvironmentVariables()
+                .readSystemProperties()
+                .build());
 
         configureOtelLogging();
 
@@ -75,11 +87,12 @@ public class Configurator {
         setDefaultValue("otel.exporter", "jaeger-thrift");
         setDefaultValue("otel.exporter.jaeger.endpoint", "http://localhost:9080/v1/trace");
         setDefaultValue("otel.exporter.jaeger.service.name", "OtelInstrumentedLambda");
+        setDefaultValue("otel.java.disabled.resource_providers", DISABLED_RESOURCE_PROVIDERS);
     }
 
     static void setDefaultValue(String name, String value) {
         if (!isConfigured(name)) {
-            log.info("Setting default value. name="+name+", value="+value);
+            log.info("Setting default value. name={}, value={}", name, value);
             System.setProperty(name, value);
         }
     }
@@ -89,6 +102,7 @@ public class Configurator {
     }
 
     private static final Pattern ENV_REPLACEMENT = Pattern.compile("[^a-zA-Z0-9_]");
+
     private static String toEnvVarName(String propertyName) {
         return ENV_REPLACEMENT.matcher(propertyName.toUpperCase()).replaceAll("_");
     }

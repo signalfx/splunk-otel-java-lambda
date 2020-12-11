@@ -14,8 +14,8 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <otel.instrumentation.version>0.11.0</otel.instrumentation.version>
-        <otel.version>0.11.0</otel.version>
+        <otel.instrumentation.version>0.12.0</otel.instrumentation.version>
+        <otel.version>0.12.0</otel.version>
     </properties>
 
     <licenses>
@@ -121,6 +121,16 @@
             <artifactId>opentelemetry-extension-trace-propagators</artifactId>
             <version>${otel.version}</version>
         </dependency>
+        <dependency>
+            <groupId>io.opentelemetry</groupId>
+            <artifactId>opentelemetry-sdk-extension-resources</artifactId>
+            <version>${otel.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.opentelemetry</groupId>
+            <artifactId>opentelemetry-sdk-extension-aws</artifactId>
+            <version>${otel.version}</version>
+        </dependency>
         <!--
             EXPORTERS
         -->
@@ -158,6 +168,28 @@
             <groupId>io.opentelemetry</groupId>
             <artifactId>opentelemetry-exporter-prometheus</artifactId>
             <version>${otel.version}</version>
+        </dependency>
+
+        <!--
+                TEST
+        -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>5.6.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>3.16.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>3.3.3</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
@@ -228,6 +260,14 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.22.2</version>
+            </plugin>
+            <plugin>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>2.22.2</version>
             </plugin>
         </plugins>
     </build>
