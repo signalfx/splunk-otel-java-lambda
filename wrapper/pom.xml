@@ -3,8 +3,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.splunk.public</groupId>
-    <artifactId>otel-lambda-wrapper</artifactId>
+    <groupId>com.signalfx</groupId>
+    <artifactId>otel-java-lambda-wrapper</artifactId>
     <packaging>jar</packaging>
     <version>1.0.0</version>
     <name>Splunk OTEL-based Lambda Wrapper</name>
@@ -32,6 +32,18 @@
         </developerConnection>
         <url>git@github.com:signalfx/otel-java-wrapper.git</url>
     </scm>
+
+    <url>http://www.splunk.com</url>
+
+    <developers>
+        <developer>
+            <id>jwach</id>
+            <name>Jakub Wach</name>
+            <email>jwach@splunk.com</email>
+            <organization>Splunk</organization>
+            <organizationUrl>http://www.splunk.com</organizationUrl>
+        </developer>
+    </developers>
 
     <profiles>
         <profile>
