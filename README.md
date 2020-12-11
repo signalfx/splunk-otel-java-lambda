@@ -21,21 +21,19 @@ Splunk provides a Serverless Application Model (SAM) template for deploying
 the Lambda wrapper with a Lambda handler or a Lambda layer. If you choose
 deploy the Lambda wrapper with a layer, Splunk also hosts a layer in AWS.
 
-## Deploy the wrapper with a Lambda function handler
+## Deploy the wrapper directly with a Lambda function handler
 
-A Splunk Lambda wrapper uses an existing AWS Lambda Java function handler.
-This approach doesn't require any code changes to your Lambda function. When
-you deploy the Lambda wrapper with a Lambda handler, you add it as a
+A Splunk Lambda wrapper wraps around an existing AWS Lambda Java function
+handler. This approach doesn't require any code changes to your Lambda function.
+When you deploy the Lambda wrapper with a Lambda handler, you add it as a
 dependency to your Lambda function. Whenever the Lambda function is invoked,
-it runs the Lambda wrapper. For more information about AWS Lambda function
-handlers, see [AWS Lambda function handler in Java](https://docs.aws.amazon.com/lambda/latest/dg/java-handler.html)
+it runs the Lambda wrapper which in turn calls your code. For more information
+about AWS Lambda function handlers, see
+[AWS Lambda function handler in Java](https://docs.aws.amazon.com/lambda/latest/dg/java-handler.html)
 on the AWS website.
 
-To reduce the size of the deployment package, make sure that your Lambda
-artifact doesn't contain the wrapper.
-
 Follow these steps to configure a Splunk Lambda wrapper to export spans to
-Splunk APM from the AWS console. You can also deploy the handler with a SAM
+Splunk APM. You can also deploy the handler with a SAM
 template. For more information, see the [example](./examples/splunk-wrapper/README.md). 
 
 1. Add the Splunk Lambda wrapper to your build definition:
@@ -96,39 +94,28 @@ template. For more information, see the [example](./examples/splunk-wrapper/READ
    ```
    OTEL_RESOURCE_ATTRIBUTES="environment=yourEnvironment"
    ```
-8. Deploy your Lambda function code.
+8. Save your settings and call the Lambda function.
 
 ## Deploy the wrapper with a Lambda layer
 
 Add a layer that includes the Splunk Lambda wrapper to your Lambda function.
 A layer is code and other content that you can run without including it in
-your deployment package. Splunk provides layers you can deploy. 
+your deployment package. Splunk provides layers in all supported regions you
+can freely use. 
+
+You can also deploy the layer with a SAM template. For more information, see the
+[example](./examples/splunk-layer/README.md).
+
+To reduce the size of the deployment package, make sure that your Lambda
+artifact doesn't contain the wrapper.
 
 Follow these steps to configure a Splunk Lambda wrapper to export spans to
-Splunk APM with a layer that Splunk provides. You can also deploy the layer
-with a SAM template. For more information, see the [example](./examples/splunk-layer/README.md). 
+Splunk APM with a layer that Splunk provides. 
 
 1. From the AWS console, add a layer to your Lambda function code.
 2. To add a layer that Splunk provides, specify an available ARN, depending on
-   your region:
-   | Region | ARN |
-   | ------ | --- |
-   | us-west-1 | arn:aws:lambda:us-west-1:254067382080:layer:signalfx-lambda-java-wrapper:2 |
-   | us-west-2 | arn:aws:lambda:us-west-2:254067382080:layer:signalfx-lambda-java-wrapper:2 |
-   | us-east-1 | arn:aws:lambda:us-east-1:254067382080:layer:signalfx-lambda-java-wrapper:2 |
-   | us-east-2 | arn:aws:lambda:us-east-2:254067382080:layer:signalfx-lambda-java-wrapper:2 |
-   | eu-west-1 | arn:aws:lambda:eu-west-1:254067382080:layer:signalfx-lambda-java-wrapper:2 |
-   | eu-west-2 | arn:aws:lambda:eu-west-2:254067382080:layer:signalfx-lambda-java-wrapper:2 |
-   | eu-west-3 | arn:aws:lambda:eu-west-3:254067382080:layer:signalfx-lambda-java-wrapper:2 |
-   | eu-north-1 | arn:aws:lambda:eu-north-1:254067382080:layer:signalfx-lambda-java-wrapper:2 |
-   | eu-central-1 | arn:aws:lambda:eu-central-1:254067382080:layer:signalfx-lambda-java-wrapper:2 |
-   | ap-south-1 | arn:aws:lambda:ap-south-1:254067382080:layer:signalfx-lambda-java-wrapper:2 |
-   | ap-southeast-1 | arn:aws:lambda:ap-southeast-1:254067382080:layer:signalfx-lambda-java-wrapper:2 |
-   | ap-southeast-2 | arn:aws:lambda:ap-southeast-2:254067382080:layer:signalfx-lambda-java-wrapper:2 |
-   | ap-northeast-1 | arn:aws:lambda:ap-northeast-1:254067382080:layer:signalfx-lambda-java-wrapper:2 |
-   | ap-northeast-2 | arn:aws:lambda:ap-northeast-2:254067382080:layer:signalfx-lambda-java-wrapper:2 |
-   | ca-central-1 | arn:aws:lambda:ca-central-1:254067382080:layer:signalfx-lambda-java-wrapper:2 |
-   | sa-east-1 | arn:aws:lambda:sa-east-1:254067382080:layer:signalfx-lambda-java-wrapper:2 |
+   your region. For an available ARN, see
+   [Latest available versions of SignalFx Lambda wrapper layers](https://github.com/signalfx/lambda-layer-versions).
 3. Verify that dependencies in the layer aren't also in the Lambda function
    .jar file.
 4. Deploy your Lambda function code.
