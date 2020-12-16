@@ -125,6 +125,31 @@ Splunk APM with a layer that Splunk provides.
    .jar file.
 4. Deploy your Lambda function code.
 
+## AWS span tags the wrapper adds to trace data
+
+The Splunk Lambda wrapper automatically adds these span tags to trace data it exports:
+
+| Splunk APM tag             | OpenTelemetry tag                               | OpenTelemetry tag type | Note                                                               |
+|--------------------------- | ----------------------------------------------- | ---------------------- | ------------------------------------------------------------------ |
+| `aws_request_id`           | `faas.execution`                                | span                   |                                                                    |
+| `lambda_arn`               | `faas.id`                                       | span                   |                                                                    |
+| `aws_region`               | `cloud.region`                                  | resource               | Disable with `otel.java.disabled.resource_providers`               |
+| `aws_account_id`           | `cloud.account.id`                              | span                   |                                                                    |
+| `aws_function_name`        | `faas.name`                                     | resource               | Disable with `otel.java.disabled.resource_providers`               |
+| `aws_function_version`     | `faas.version`                                  | resource               | Disable with `otel.java.disabled.resource_providers`               |
+| `aws_function_qualifier`   |                                                 |                        |                                                                    |
+| `event_source_mappings`    | `faas.name`                                     | resource               | Disable with `otel.java.disabled.resource_providers`               |
+| `aws_execution_env`        | `process.runtime.{name,version,description}`    | resource               | Disable with `otel.java.disabled.resource_providers`               |
+| `function_wrapper_version` | `otel.library.name`                             | span                   |                                                                    |
+| `component`                | `otel.library.name`                             | span                   |                                                                    |
+|                            | `cloud.provider`                                | resource               | Always `aws`. Disable with `otel.java.disabled.resource_providers` |
+|                            | `os.{name,description}`                         | resource               | Disable with `otel.java.disabled.resource_providers`               |
+|                            | `process.{pid,executable.path,command_line}`    | resource               | Disable with `otel.java.disabled.resource_providers`               |
+|                            | `faas.trigger`                                  | span                   | Only for API gateway proxy                                         |
+|                            | `http.method`                                   | span                   | Only for API gateway proxy                                         |
+|                            | `http.user_agent`                               | span                   | Only for API gateway proxy                                         |
+|                            | `http.url`                                      | span                   | Only for API gateway proxy                                         |
+
 ## Logging
 
 These environment variables control logging:
