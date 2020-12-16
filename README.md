@@ -127,28 +127,30 @@ Splunk APM with a layer that Splunk provides.
 
 ## AWS span tags the wrapper adds to trace data
 
-The Splunk Lambda wrapper automatically adds these span tags to trace data it exports:
+The Splunk Lambda wrapper automatically adds span tags to trace data it
+exports. Additionally, OpenTelemetry includes span tags for AWS metadata as
+well. These are the available span tags for AWS metadata:
 
-| Splunk APM tag             | OpenTelemetry tag                               | OpenTelemetry tag type | Note                                                               |
-|--------------------------- | ----------------------------------------------- | ---------------------- | ------------------------------------------------------------------ |
-| `aws_request_id`           | `faas.execution`                                | span                   |                                                                    |
-| `lambda_arn`               | `faas.id`                                       | span                   |                                                                    |
-| `aws_region`               | `cloud.region`                                  | resource               | Disable with `otel.java.disabled.resource_providers`               |
-| `aws_account_id`           | `cloud.account.id`                              | span                   |                                                                    |
-| `aws_function_name`        | `faas.name`                                     | resource               | Disable with `otel.java.disabled.resource_providers`               |
-| `aws_function_version`     | `faas.version`                                  | resource               | Disable with `otel.java.disabled.resource_providers`               |
-| `aws_function_qualifier`   |                                                 |                        |                                                                    |
-| `event_source_mappings`    | `faas.name`                                     | resource               | Disable with `otel.java.disabled.resource_providers`               |
-| `aws_execution_env`        | `process.runtime.{name,version,description}`    | resource               | Disable with `otel.java.disabled.resource_providers`               |
-| `function_wrapper_version` | `otel.library.name`                             | span                   |                                                                    |
-| `component`                | `otel.library.name`                             | span                   |                                                                    |
-|                            | `cloud.provider`                                | resource               | Always `aws`. Disable with `otel.java.disabled.resource_providers` |
-|                            | `os.{name,description}`                         | resource               | Disable with `otel.java.disabled.resource_providers`               |
-|                            | `process.{pid,executable.path,command_line}`    | resource               | Disable with `otel.java.disabled.resource_providers`               |
-|                            | `faas.trigger`                                  | span                   | Only for API gateway proxy                                         |
-|                            | `http.method`                                   | span                   | Only for API gateway proxy                                         |
-|                            | `http.user_agent`                               | span                   | Only for API gateway proxy                                         |
-|                            | `http.url`                                      | span                   | Only for API gateway proxy                                         |
+| Splunk Lambda wrapper span tag | Default OpenTelemetry span tag                  | Note                                                               |
+|---------------------------     | ----------------------------------------------- | ------------------------------------------------------------------ |
+| `aws_request_id`               | `faas.execution`                                |                                                                    |
+| `lambda_arn`                   | `faas.id`                                       |                                                                    |
+| `aws_region`                   | `cloud.region`                                  | Disable with `otel.java.disabled.resource_providers`               |
+| `aws_account_id`               | `cloud.account.id`                              |                                                                    |
+| `aws_function_name`            | `faas.name`                                     | Disable with `otel.java.disabled.resource_providers`               |
+| `aws_function_version`         | `faas.version`                                  | Disable with `otel.java.disabled.resource_providers`               |
+| `aws_function_qualifier`       |                                                 |                                                                    |
+| `event_source_mappings`        | `faas.name`                                     | Disable with `otel.java.disabled.resource_providers`               |
+| `aws_execution_env`            | `process.runtime.{name,version,description}`    | Disable with `otel.java.disabled.resource_providers`               |
+| `function_wrapper_version`     | `otel.library.name`                             |                                                                    |
+| `component`                    | `otel.library.name`                             |                                                                    |
+|                                | `cloud.provider`                                | Always `aws`. Disable with `otel.java.disabled.resource_providers` |
+|                                | `os.{name,description}`                         | Disable with `otel.java.disabled.resource_providers`               |
+|                                | `process.{pid,executable.path,command_line}`    | Disable with `otel.java.disabled.resource_providers`               |
+|                                | `faas.trigger`                                  | Only for API gateway proxy                                         |
+|                                | `http.method`                                   | Only for API gateway proxy                                         |
+|                                | `http.user_agent`                               | Only for API gateway proxy                                         |
+|                                | `http.url`                                      | Only for API gateway proxy                                         |
 
 ## Logging
 
