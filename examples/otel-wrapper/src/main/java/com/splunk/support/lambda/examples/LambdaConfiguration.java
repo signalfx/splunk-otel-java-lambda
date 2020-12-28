@@ -16,14 +16,11 @@
 package com.splunk.support.lambda.examples;
 
 import io.opentelemetry.api.OpenTelemetry;
-import io.opentelemetry.api.trace.TracerProvider;
-import io.opentelemetry.context.propagation.DefaultContextPropagators;
+import io.opentelemetry.context.propagation.ContextPropagators;
 import io.opentelemetry.exporter.logging.LoggingSpanExporter;
 import io.opentelemetry.extension.trace.propagation.B3Propagator;
 import io.opentelemetry.sdk.OpenTelemetrySdk;
-import io.opentelemetry.sdk.trace.TracerSdkManagement;
 import io.opentelemetry.sdk.trace.export.SimpleSpanProcessor;
-import java.lang.reflect.Method;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -56,32 +53,9 @@ public final class LambdaConfiguration {
     }
 
     private static void configureOpenTelemetry() {
-        OpenTelemetry.set(
-                OpenTelemetrySdk.builder()
-                        .setResource(OpenTelemetrySdk.get().getResource())
-                        .setClock(OpenTelemetrySdk.get().getClock())
-                        .setMeterProvider(OpenTelemetry.getGlobalMeterProvider())
-                        .setTracerProvider(unobfuscate(OpenTelemetry.getGlobalTracerProvider()))
-                        .setPropagators(DefaultContextPropagators.builder()
-                                .addTextMapPropagator(B3Propagator.getInstance())
-                                .build())
-                        .build());
+        // propagator
+        OpenTelemetry.setGlobalPropagators(ContextPropagators.create(B3Propagator.getInstance()));
         // exporter
-        TracerSdkManagement tracerSdkManagement = OpenTelemetrySdk.getGlobalTracerManagement();
-        tracerSdkManagement.addSpanProcessor(
-                SimpleSpanProcessor.builder(new LoggingSpanExporter()).build());
-    }
-
-    private static TracerProvider unobfuscate(TracerProvider tracerProvider) {
-        if (tracerProvider.getClass().getName().endsWith("TracerSdkProvider")) {
-            return tracerProvider;
-        }
-        try {
-            Method unobfuscate = tracerProvider.getClass().getDeclaredMethod("unobfuscate");
-            unobfuscate.setAccessible(true);
-            return (TracerProvider) unobfuscate.invoke(tracerProvider);
-        } catch (Throwable t) {
-            return tracerProvider;
-        }
+        OpenTelemetrySdk.getGlobalTracerManagement().addSpanProcessor(SimpleSpanProcessor.builder(new LoggingSpanExporter()).build());
     }
 }

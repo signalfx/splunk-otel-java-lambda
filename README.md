@@ -96,6 +96,12 @@ template. For more information, see the [example](./examples/splunk-wrapper/READ
    OTEL_EXPORTER_JAEGER_SERVICE_NAME="serviceName"
    SIGNALFX_AUTH_TOKEN="orgAccessToken"
    ```
+   Also, you can set span flush wait timeout, that is max time the function will wait for the spans to be ingested by the Splunk APM. Default is 1 second. 
+   Timeout is controlled with a following property (value in seconds):
+   ```
+   OTEL_LAMBDA_FLUSH_TIMEOUT: 30
+   ```
+   
    If you want to use a different exporter, set the `OTEL_EXPORTERS`
    environment variable. Other exporters have their own configuration settings.
    For more information, see the [OpenTelemetry Instrumentation for Java](https://github.com/open-telemetry/opentelemetry-java-instrumentation)
@@ -104,8 +110,8 @@ template. For more information, see the [example](./examples/splunk-wrapper/READ
    `OTEL_RESOURCE_ATTRIBUTES` environment variable:
    ```
    OTEL_RESOURCE_ATTRIBUTES="environment=yourEnvironment"
-   ```
-8. Save your settings and call the Lambda function.
+   ```   
+9. Save your settings and call the Lambda function.
 
 ## Deploy the wrapper with a Lambda layer
 
