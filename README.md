@@ -128,8 +128,7 @@ Splunk APM with a layer that Splunk provides.
 ## AWS span tags the wrapper adds to trace data
 
 The Splunk Lambda wrapper automatically adds span tags to trace data it
-exports. Additionally, OpenTelemetry includes span tags for AWS metadata as
-well. These are the available span tags for AWS metadata:
+exports. These are the available span tags for AWS metadata:
 
 | Splunk Lambda wrapper span tag | Description                                                                                                                      |
 |------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
