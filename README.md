@@ -125,6 +125,28 @@ Splunk APM with a layer that Splunk provides.
    .jar file.
 4. Deploy your Lambda function code.
 
+## AWS span tags the wrapper adds to trace data
+
+The Splunk Lambda wrapper automatically adds span tags to trace data it
+exports. These are the available span tags for AWS metadata. For more
+information, see the [OpenTelemetry Specification](https://github.com/open-telemetry/opentelemetry-specification).
+
+| Span tag                                     | Example                                                                             | Description                                                                               |
+| -------------------------------------------- | ----------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| `cloud.account.id`                           | `123456789012`                                                                      | The AWS account ID.                                                                       |
+| `cloud.provider`                             | `aws`                                                                               | The name of the cloud provider.                                                           |
+| `cloud.region`                               | `us-west-2`                                                                         | The AWS region.                                                                           |
+| `faas.execution`                             | `af9d5aa4-a685-4c5f-a22b-444f80b3cc28`                                              | The AWS request ID.                                                                       |
+| `faas.id`                                    | `arn:aws:lambda:us-west-2:123456789012:function:my-lambda-function`                 | The ARN of the Lambda function instance.                                                  |
+| `faas.name`                                  | `my-lambda-function`                                                                | The Lambda function name.                                                                 |
+| `faas.trigger`                               | `http`                                                                        | The type of trigger the function executed on. Only for the API gateway proxy.             |
+| `faas.version`                               | `2.0.0`                                                                             | The Lambda function version.                                                              |
+| `http.method`                                | `GET`, `POST`, `HEAD`                                                               | The HTTP request method. Only for the API gateway proxy.                                  |
+| `http.url`                                   | `https://www.foo.bar/search?q=OpenTelemetry#SemConv`                                | The full HTTP request URL. Only for the API gateway proxy.                                |
+| `http.user_agent`                            | `CERN-LineMode/2.15 libwww/2.17b3`                                                  | The value of the HTTP user-agent header the client sends. Only for the API gateway proxy. |
+| `otel.library.name`                          | `io.opentelemetry.aws-lambda`                                                       | The SignalFx function wrapper qualifier.                                                  |
+| `process.runtime.{name,version,description}` | `OpenJDK Runtime Environment,14.0.2,Eclipse OpenJ9 Eclipse OpenJ9 VM openj9-0.21.0` | The AWS execution environment.                                                            |
+
 ## Logging
 
 These environment variables control logging:
