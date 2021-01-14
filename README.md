@@ -131,26 +131,19 @@ The Splunk Lambda wrapper automatically adds span tags to trace data it
 exports. Additionally, OpenTelemetry includes span tags for AWS metadata as
 well. These are the available span tags for AWS metadata:
 
-| Splunk Lambda wrapper span tag | Default OpenTelemetry span tag                  | Note                                                               |
-|---------------------------     | ----------------------------------------------- | ------------------------------------------------------------------ |
-| `aws_request_id`               | `faas.execution`                                |                                                                    |
-| `lambda_arn`                   | `faas.id`                                       |                                                                    |
-| `aws_region`                   | `cloud.region`                                  | Disable with `otel.java.disabled.resource_providers`               |
-| `aws_account_id`               | `cloud.account.id`                              |                                                                    |
-| `aws_function_name`            | `faas.name`                                     | Disable with `otel.java.disabled.resource_providers`               |
-| `aws_function_version`         | `faas.version`                                  | Disable with `otel.java.disabled.resource_providers`               |
-| `aws_function_qualifier`       |                                                 |                                                                    |
-| `event_source_mappings`        | `faas.name`                                     | Disable with `otel.java.disabled.resource_providers`               |
-| `aws_execution_env`            | `process.runtime.{name,version,description}`    | Disable with `otel.java.disabled.resource_providers`               |
-| `function_wrapper_version`     | `otel.library.name`                             |                                                                    |
-| `component`                    | `otel.library.name`                             |                                                                    |
-|                                | `cloud.provider`                                | Always `aws`. Disable with `otel.java.disabled.resource_providers` |
-|                                | `os.{name,description}`                         | Disable with `otel.java.disabled.resource_providers`               |
-|                                | `process.{pid,executable.path,command_line}`    | Disable with `otel.java.disabled.resource_providers`               |
-|                                | `faas.trigger`                                  | Only for API gateway proxy                                         |
-|                                | `http.method`                                   | Only for API gateway proxy                                         |
-|                                | `http.user_agent`                               | Only for API gateway proxy                                         |
-|                                | `http.url`                                      | Only for API gateway proxy                                         |
+| Splunk Lambda wrapper span tag | Description                                                                                                                      |
+|------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `aws_request_id`               | The AWS request ID.                                                                                                              |
+| `lambda_arn`                   | The ARN of the Lambda function instance.                                                                                         |
+| `aws_region`                   | The AWS region.                                                                                                                  |
+| `aws_account_id`               | The AWS account ID.                                                                                                              |
+| `aws_function_name`            | The Lambda function name.                                                                                                        |
+| `aws_function_version`         | The Lambda function version.                                                                                                     |
+| `aws_function_qualifier`       | The Lambda function version qualifier. If it's not an event source mapping Lambda invocation, it's the version or version alias. |
+| `event_source_mappings`        | The Lambda function name, if it's an event source mapping Lambda invocation.                                                     |
+| `aws_execution_env`            | The AWS execution environment.                                                                                                   |
+| `function_wrapper_version`     | The SignalFx function wrapper qualifier.                                                                                         |
+| `component`                    | The literal value of `dotnet-lambda-wrapper`.                                                                                    |
 
 ## Logging
 
