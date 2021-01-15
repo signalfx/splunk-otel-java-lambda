@@ -39,6 +39,8 @@ public class Configurator {
     // Disable all non-lambda AWS resources to make startup faster
     private static final String DISABLED_RESOURCE_PROVIDERS =
             String.join(",",
+                    "io.opentelemetry.sdk.extension.resources.OsResource",
+                    "io.opentelemetry.sdk.extension.resources.ProcessResource",
                     "io.opentelemetry.sdk.extension.aws.resource.BeanstalkResource",
                     "io.opentelemetry.sdk.extension.aws.resource.Ec2Resource",
                     "io.opentelemetry.sdk.extension.aws.resource.EcsResource",
