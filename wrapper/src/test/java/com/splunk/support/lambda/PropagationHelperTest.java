@@ -5,6 +5,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import io.opentelemetry.context.Context;
 import io.opentelemetry.context.propagation.TextMapPropagator;
 import io.opentelemetry.extension.trace.propagation.B3Propagator;
+import io.opentelemetry.sdk.OpenTelemetrySdk;
+import io.opentelemetry.sdk.OpenTelemetrySdkBuilder;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -36,7 +38,9 @@ public class PropagationHelperTest {
     public void shouldCreateB3OutboundHeaders() {
 
         // given
-        PropagatorsInitializer.initializePropagators(Collections.singletonList("b3multi"));
+        OpenTelemetrySdkBuilder openTelemetrySdkBuilder = OpenTelemetrySdk.builder();
+        PropagatorsInitializer.initializePropagators(openTelemetrySdkBuilder, Collections.singletonList("b3multi"));
+        openTelemetrySdkBuilder.buildAndRegisterGlobal();
         initContextWith("4fd0b6131f19f39af59518d127b0cafe", "0000000000000123");
 
         // when

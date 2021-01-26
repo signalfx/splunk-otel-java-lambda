@@ -22,7 +22,9 @@ import io.opentelemetry.exporter.jaeger.thrift.JaegerThriftSpanExporterBuilder;
 import io.opentelemetry.exporter.logging.LoggingSpanExporter;
 import io.opentelemetry.exporter.otlp.trace.OtlpGrpcSpanExporter;
 import io.opentelemetry.exporter.zipkin.ZipkinSpanExporter;
-import io.opentelemetry.sdk.OpenTelemetrySdk;
+import io.opentelemetry.sdk.OpenTelemetrySdkBuilder;
+import io.opentelemetry.sdk.trace.SdkTracerProvider;
+import io.opentelemetry.sdk.trace.SdkTracerProviderBuilder;
 import io.opentelemetry.sdk.trace.export.BatchSpanProcessor;
 import io.opentelemetry.sdk.trace.export.SpanExporter;
 import java.util.List;
@@ -35,14 +37,16 @@ import org.slf4j.LoggerFactory;
 
 public class ExportersInitializer {
 
-    private static final Logger log = LoggerFactory.getLogger(Configurator.class);
+    private static final Logger log = LoggerFactory.getLogger(ExportersInitializer.class);
 
-    static synchronized void initializeExporters(List<String> exporters, Properties config) {
+    static synchronized void initializeExporters(OpenTelemetrySdkBuilder sdkBuilder, List<String> exporters, Properties config) {
 
         log.debug("Installing exporters: {}", exporters);
+        SdkTracerProviderBuilder sdkTracerBuilder = SdkTracerProvider.builder();
         for (String exporterName : exporters) {
-            installExporter(exporterName, config, getSpanExporter(exporterName, config));
+            installExporter(sdkTracerBuilder, exporterName, config, getSpanExporter(exporterName, config));
         }
+        sdkBuilder.setTracerProvider(sdkTracerBuilder.build());
     }
 
     private static SpanExporter getSpanExporter(String exporterName, Properties config) {
@@ -57,12 +61,12 @@ public class ExportersInitializer {
         return null;
     }
 
-    private static void installExporter(String exporterName, Properties config, SpanExporter spanExporter) {
+    private static void installExporter(SdkTracerProviderBuilder sdkTracerBuilder, String exporterName, Properties config, SpanExporter spanExporter) {
 
         if (spanExporter != null) {
             BatchSpanProcessor spanProcessor =
                     BatchSpanProcessor.builder(spanExporter).readProperties(config).build();
-            OpenTelemetrySdk.getGlobalTracerManagement().addSpanProcessor(spanProcessor);
+            sdkTracerBuilder.addSpanProcessor(spanProcessor);
             log.debug("Installed span exporter: {}",  exporterName);
         } else {
             log.warn("Exporter: {} not found", exporterName);

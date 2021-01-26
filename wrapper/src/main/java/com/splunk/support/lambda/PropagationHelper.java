@@ -1,6 +1,6 @@
 package com.splunk.support.lambda;
 
-import io.opentelemetry.api.OpenTelemetry;
+import io.opentelemetry.api.GlobalOpenTelemetry;
 import io.opentelemetry.context.Context;
 import io.opentelemetry.context.propagation.TextMapPropagator;
 import java.util.HashMap;
@@ -14,7 +14,7 @@ public final class PropagationHelper {
 
     public static Map<String, String> createHeaders() {
 
-        TextMapPropagator propagator = OpenTelemetry.getGlobalPropagators().getTextMapPropagator();
+        TextMapPropagator propagator = GlobalOpenTelemetry.getPropagators().getTextMapPropagator();
         Map<String, String> result = new HashMap<>();
         propagator.inject(Context.current(), result, SETTER);
         return result;

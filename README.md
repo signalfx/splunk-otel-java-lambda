@@ -51,7 +51,7 @@ template. For more information, see the [example](./examples/splunk-wrapper/READ
    Gradle:
    ```
    dependencies {
-     implementation("com.splunk.public:otel-lambda-wrapper:0.0.1")
+     implementation("com.splunk.public:otel-lambda-wrapper:0.0.2")
    }
    ```
 
@@ -60,7 +60,7 @@ template. For more information, see the [example](./examples/splunk-wrapper/READ
    <dependency>
      <groupId>com.splunk.public</groupId>
      <artifactId>otel-lambda-wrapper</artifactId>
-     <version>0.0.1</version>
+     <version>0.0.2</version>
    </dependency>
    ```
 2. From the AWS console, upload the .zip file to your Lambda function code.
@@ -99,7 +99,7 @@ template. For more information, see the [example](./examples/splunk-wrapper/READ
    Also, you can set span flush wait timeout, that is max time the function will wait for the spans to be ingested by the Splunk APM. Default is 1 second. 
    Timeout is controlled with a following property (value in seconds):
    ```
-   OTEL_LAMBDA_FLUSH_TIMEOUT: 30
+   OTEL_INSTRUMENTATION_AWS_LAMBDA_FLUSH_TIMEOUT: 30
    ```
    
    If you want to use a different exporter, set the `OTEL_EXPORTERS`
