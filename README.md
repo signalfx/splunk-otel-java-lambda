@@ -75,10 +75,10 @@ template. For more information, see the [example](./examples/splunk-wrapper/READ
    | `com.splunk.support.lambda.TracingRequestStreamWrapper` | Wrap a streaming handler and enable HTTP context propagation for HTTP requests. |
 
    For more information about setting a handler for your Lambda function in the AWS console, see [Configuring functions in the console](https://docs.aws.amazon.com/lambda/latest/dg/configuration-console.html) on the AWS website.
-4. Set the `OTEL_LAMBDA_HANDLER` environment variable in your Lambda function
+4. Set the `OTEL_INSTRUMENTATION_AWS_LAMBDA_HANDLER` environment variable in your Lambda function
    code:
    ```
-   OTEL_LAMBDA_HANDLER="package.ClassName::methodName"
+   OTEL_INSTRUMENTATION_AWS_LAMBDA_HANDLER="package.ClassName::methodName"
    ```
    For more information about setting environment variables in the AWS console,
    see [Using AWS Lambda environment variables](https://docs.aws.amazon.com/lambda/latest/dg/configuration-envvars.html)
