@@ -111,7 +111,7 @@ template. For more information, see the [example](./examples/splunk-wrapper/READ
    ```
    OTEL_RESOURCE_ATTRIBUTES="environment=yourEnvironment"
    ```   
-9. Save your settings and call the Lambda function.
+8. Save your settings and call the Lambda function.
 
 ## Deploy the wrapper with a Lambda layer
 

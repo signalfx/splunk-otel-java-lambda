@@ -15,11 +15,11 @@
  */
 package com.splunk.support.lambda.examples;
 
-import io.opentelemetry.api.OpenTelemetry;
 import io.opentelemetry.context.propagation.ContextPropagators;
 import io.opentelemetry.exporter.logging.LoggingSpanExporter;
 import io.opentelemetry.extension.trace.propagation.B3Propagator;
 import io.opentelemetry.sdk.OpenTelemetrySdk;
+import io.opentelemetry.sdk.trace.SdkTracerProvider;
 import io.opentelemetry.sdk.trace.export.SimpleSpanProcessor;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
@@ -53,9 +53,11 @@ public final class LambdaConfiguration {
     }
 
     private static void configureOpenTelemetry() {
-        // propagator
-        OpenTelemetry.setGlobalPropagators(ContextPropagators.create(B3Propagator.getInstance()));
-        // exporter
-        OpenTelemetrySdk.getGlobalTracerManagement().addSpanProcessor(SimpleSpanProcessor.builder(new LoggingSpanExporter()).build());
+
+        OpenTelemetrySdk
+                .builder()
+                .setPropagators(ContextPropagators.create(B3Propagator.getInstance()))
+                .setTracerProvider(SdkTracerProvider.builder().addSpanProcessor(SimpleSpanProcessor.create(new LoggingSpanExporter())).build())
+                .buildAndRegisterGlobal();
     }
 }
