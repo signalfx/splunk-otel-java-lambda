@@ -22,6 +22,7 @@ Resources:
       Environment:
         Variables:
           OTEL_LAMBDA_HANDLER: com.splunk.support.lambda.examples.ApiGatewayRequestFunction::handleRequest
+          OTEL_LAMBDA_FLUSH_TIMEOUT: 30
           OTEL_EXPORTER: logging
           OTEL_LAMBDA_LOG_LEVEL: DEBUG
           OTEL_LIB_LOG_LEVEL: FINEST
@@ -51,6 +52,7 @@ Resources:
       Environment:
         Variables:
           OTEL_LAMBDA_HANDLER: com.splunk.support.lambda.examples.ApiGatewayRequestStreamFunction::handleRequest
+          OTEL_LAMBDA_FLUSH_TIMEOUT: 30
           OTEL_EXPORTER: logging
           OTEL_LAMBDA_LOG_LEVEL: DEBUG
           OTEL_LIB_LOG_LEVEL: FINEST
@@ -86,6 +88,7 @@ Resources:
       Environment:
         Variables:
           OTEL_LAMBDA_HANDLER: com.splunk.support.lambda.examples.RequestFunction::handleRequest
+          OTEL_LAMBDA_FLUSH_TIMEOUT: 30
           OTEL_EXPORTER: logging
           OTEL_LAMBDA_LOG_LEVEL: DEBUG
           OTEL_LIB_LOG_LEVEL: FINEST
@@ -104,6 +107,7 @@ Resources:
       Environment:
         Variables:
           OTEL_LAMBDA_HANDLER: com.splunk.support.lambda.examples.RequestStreamFunction::handleRequest
+          OTEL_LAMBDA_FLUSH_TIMEOUT: 30
           OTEL_EXPORTER: logging
           OTEL_LAMBDA_LOG_LEVEL: DEBUG
           OTEL_LIB_LOG_LEVEL: FINEST

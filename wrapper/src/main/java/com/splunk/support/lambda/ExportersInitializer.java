@@ -18,28 +18,35 @@ package com.splunk.support.lambda;
 import io.jaegertracing.thrift.internal.senders.HttpSender;
 import io.opentelemetry.exporter.jaeger.JaegerGrpcSpanExporter;
 import io.opentelemetry.exporter.jaeger.thrift.JaegerThriftSpanExporter;
+import io.opentelemetry.exporter.jaeger.thrift.JaegerThriftSpanExporterBuilder;
 import io.opentelemetry.exporter.logging.LoggingSpanExporter;
-import io.opentelemetry.exporter.otlp.OtlpGrpcSpanExporter;
+import io.opentelemetry.exporter.otlp.trace.OtlpGrpcSpanExporter;
 import io.opentelemetry.exporter.zipkin.ZipkinSpanExporter;
-import io.opentelemetry.sdk.OpenTelemetrySdk;
+import io.opentelemetry.sdk.OpenTelemetrySdkBuilder;
+import io.opentelemetry.sdk.trace.SdkTracerProvider;
+import io.opentelemetry.sdk.trace.SdkTracerProviderBuilder;
 import io.opentelemetry.sdk.trace.export.BatchSpanProcessor;
 import io.opentelemetry.sdk.trace.export.SpanExporter;
 import java.util.List;
 import java.util.Properties;
 import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class ExportersInitializer {
 
-    private static final Logger log = LoggerFactory.getLogger(Configurator.class);
+    private static final Logger log = LoggerFactory.getLogger(ExportersInitializer.class);
 
-    static synchronized void initializeExporters(List<String> exporters, Properties config) {
+    static synchronized void initializeExporters(OpenTelemetrySdkBuilder sdkBuilder, List<String> exporters, Properties config) {
 
         log.debug("Installing exporters: {}", exporters);
+        SdkTracerProviderBuilder sdkTracerBuilder = SdkTracerProvider.builder();
         for (String exporterName : exporters) {
-            installExporter(exporterName, config, getSpanExporter(exporterName, config));
+            installExporter(sdkTracerBuilder, exporterName, config, getSpanExporter(exporterName, config));
         }
+        sdkBuilder.setTracerProvider(sdkTracerBuilder.build());
     }
 
     private static SpanExporter getSpanExporter(String exporterName, Properties config) {
@@ -54,12 +61,12 @@ public class ExportersInitializer {
         return null;
     }
 
-    private static void installExporter(String exporterName, Properties config, SpanExporter spanExporter) {
+    private static void installExporter(SdkTracerProviderBuilder sdkTracerBuilder, String exporterName, Properties config, SpanExporter spanExporter) {
 
         if (spanExporter != null) {
             BatchSpanProcessor spanProcessor =
                     BatchSpanProcessor.builder(spanExporter).readProperties(config).build();
-            OpenTelemetrySdk.getGlobalTracerManagement().addSpanProcessor(spanProcessor);
+            sdkTracerBuilder.addSpanProcessor(spanProcessor);
             log.debug("Installed span exporter: {}",  exporterName);
         } else {
             log.warn("Exporter: {} not found", exporterName);
@@ -71,11 +78,21 @@ public class ExportersInitializer {
     }
 
     private static SpanExporter jaegerThriftSpanExporter(Properties config) {
-        JaegerThriftSpanExporter.Builder builder = JaegerThriftSpanExporter.builder().readProperties(config);
-        OkHttpClient client = new OkHttpClient.Builder().addInterceptor(new AuthTokenInterceptor()).build();
+        JaegerThriftSpanExporterBuilder builder = JaegerThriftSpanExporter.builder().readProperties(config);
+        OkHttpClient client = new OkHttpClient.Builder()
+                .addInterceptor(new AuthTokenInterceptor())
+                .addInterceptor(getHttpLoggingInterceptor())
+                .build();
         HttpSender thriftSender = new HttpSender.Builder(config.getProperty("otel.exporter.jaeger.endpoint")).withClient(client).build();
         builder.setThriftSender(thriftSender);
         return builder.build();
+    }
+
+    @NotNull
+    private static HttpLoggingInterceptor getHttpLoggingInterceptor() {
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+        logging.setLevel(HttpLoggingInterceptor.Level.BASIC);
+        return logging;
     }
 
     private static SpanExporter loggingSpanExporter(Properties config) {

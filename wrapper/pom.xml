@@ -14,8 +14,8 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <otel.instrumentation.version>0.12.0</otel.instrumentation.version>
-        <otel.version>0.12.0</otel.version>
+        <otel.instrumentation.version>0.14.0</otel.instrumentation.version>
+        <otel.version>0.14.1</otel.version>
     </properties>
 
     <licenses>
@@ -176,11 +176,6 @@
             <artifactId>opentelemetry-exporter-zipkin</artifactId>
             <version>${otel.version}</version>
         </dependency>
-        <dependency>
-            <groupId>io.opentelemetry</groupId>
-            <artifactId>opentelemetry-exporter-prometheus</artifactId>
-            <version>${otel.version}</version>
-        </dependency>
 
         <!--
                 TEST
@@ -203,18 +198,24 @@
             <version>3.3.3</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>logging-interceptor</artifactId>
+            <version>4.9.0</version>
+        </dependency>
     </dependencies>
 
     <repositories>
         <repository>
-            <id>bintray</id>
-            <url>https://dl.bintray.com/open-telemetry/maven</url>
+            <id>jfrog-oss</id>
+            <url>https://oss.jfrog.org/libs-snapshot</url>
+            <snapshots></snapshots>
             <releases></releases>
         </repository>
         <repository>
-            <id>oss-snapshots</id>
-            <url>https://oss.jfrog.org/artifactory/oss-snapshot-local</url>
-            <snapshots></snapshots>
+            <id>bintray</id>
+            <url>https://dl.bintray.com/open-telemetry/maven</url>
+            <releases></releases>
         </repository>
     </repositories>
 

@@ -20,6 +20,8 @@ import static com.splunk.support.lambda.PropagatorsInitializer.initializePropaga
 
 import io.opentelemetry.instrumentation.api.config.Config;
 import io.opentelemetry.instrumentation.api.config.ConfigBuilder;
+import io.opentelemetry.sdk.OpenTelemetrySdk;
+import io.opentelemetry.sdk.OpenTelemetrySdkBuilder;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
 import java.util.logging.SimpleFormatter;
@@ -55,12 +57,14 @@ public class Configurator {
 
         configureOtelLogging();
 
-        initializeExporters(Config.get().getListProperty(EXPORTERS_CONFIG), Config.get().asJavaProperties());
-        initializePropagators(Config.get().getListProperty(PROPAGATORS_CONFIG));
+        OpenTelemetrySdkBuilder sdkBuilder = OpenTelemetrySdk.builder();
+        initializeExporters(sdkBuilder, Config.get().getListProperty(EXPORTERS_CONFIG), Config.get().asJavaProperties());
+        initializePropagators(sdkBuilder, Config.get().getListProperty(PROPAGATORS_CONFIG));
+        sdkBuilder.buildAndRegisterGlobal();
     }
 
     private static void configureOtelLogging() {
-        // otel logging - java!
+        // otel and okhttp3 logging - java!
         final ConsoleHandler consoleHandler = new ConsoleHandler();
         consoleHandler.setLevel(Level.FINEST);
         consoleHandler.setFormatter(new SimpleFormatter());
@@ -69,7 +73,11 @@ public class Configurator {
         otel.setLevel(getOtelLibLogLevel());
         otel.addHandler(consoleHandler);
 
-        log.info("Configured OTEL lib log level: {}", otel.getLevel());
+        final java.util.logging.Logger okhttp3 = java.util.logging.Logger.getLogger("okhttp3");
+        okhttp3.setLevel(getOtelLibLogLevel());
+        okhttp3.addHandler(consoleHandler);
+
+        log.info("Configured OTEL library log level: {}", otel.getLevel());
     }
 
     private static Level getOtelLibLogLevel() {
@@ -78,7 +86,7 @@ public class Configurator {
             try {
                 return Level.parse(level);
             } catch (IllegalArgumentException iae) {
-                log.debug("Could not parse OTEL lib log level", iae);
+                log.debug("Could not parse OTEL library log level", iae);
             }
         }
         return Level.WARNING;
