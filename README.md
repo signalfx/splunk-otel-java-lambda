@@ -165,7 +165,7 @@ These environment variables control logging:
 
 | Environment variable | Description |
 | -------------------- | ----------- |
-| `OTEL_LIB_LOG_LEVEL` | Controls logging for the OpenTelemetry library itself. By default, it's set to `WARNING` and uses `java.util.logging` values. |
+| `OTEL_LIB_LOG_LEVEL` | Controls logging for the OpenTelemetry library and `jaeger-thrift` exporter (if configured). By default, it's set to `WARNING` and uses `java.util.logging` values. |
 | `OTEL_LAMBDA_LOG_LEVEL` | Controls logging of the Splunk Lambda wrapper. By default, it's set to `WARN` and uses `log4j2` values.
 
 ## License and versioning

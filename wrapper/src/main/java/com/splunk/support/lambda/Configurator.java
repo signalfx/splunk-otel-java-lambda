@@ -69,7 +69,7 @@ public class Configurator {
     }
 
     private static void configureOtelLogging() {
-        // otel logging - java!
+        // otel and okhttp3 logging - java!
         final ConsoleHandler consoleHandler = new ConsoleHandler();
         consoleHandler.setLevel(Level.FINEST);
         consoleHandler.setFormatter(new SimpleFormatter());
@@ -78,7 +78,11 @@ public class Configurator {
         otel.setLevel(getOtelLibLogLevel());
         otel.addHandler(consoleHandler);
 
-        log.info("Configured OTEL lib log level: {}", otel.getLevel());
+        final java.util.logging.Logger okhttp3 = java.util.logging.Logger.getLogger("okhttp3");
+        okhttp3.setLevel(getOtelLibLogLevel());
+        okhttp3.addHandler(consoleHandler);
+
+        log.info("Configured OTEL library log level: {}", otel.getLevel());
     }
 
     private static Level getOtelLibLogLevel() {
@@ -87,7 +91,7 @@ public class Configurator {
             try {
                 return Level.parse(level);
             } catch (IllegalArgumentException iae) {
-                log.debug("Could not parse OTEL lib log level", iae);
+                log.debug("Could not parse OTEL library log level", iae);
             }
         }
         return Level.WARNING;
