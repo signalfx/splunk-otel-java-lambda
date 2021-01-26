@@ -5,6 +5,6 @@ ext {
     versions = [
             opentelemetry: '0.14.1',
             instrumentation: '0.14.0',
-            wrapper: '0.0.2'
+            wrapper: '0.0.3-SNAPSHOT'
     ]
 }
