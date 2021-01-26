@@ -21,6 +21,6 @@ jobs:
       with:
         java-version: 1.8
     - name: Build wrapper with Maven
-      run: mvn -B package --file ./wrapper/pom.xml
+      run: mvn -B install --file ./wrapper/pom.xml
     - name: Build and test examples with gradle
       run: cd ./examples && ./gradlew build --scan --no-daemon
