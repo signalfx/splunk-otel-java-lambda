@@ -15,14 +15,14 @@
  */
 package com.splunk.support.lambda;
 
-import static com.splunk.support.lambda.ExportersInitializer.initializeExporters;
-import static com.splunk.support.lambda.PropagatorsInitializer.initializePropagators;
+import static com.splunk.support.lambda.ExportersInitializer.configureExporters;
+import static com.splunk.support.lambda.PropagatorsInitializer.configurePropagators;
 
 import io.opentelemetry.instrumentation.api.config.Config;
 import io.opentelemetry.instrumentation.api.config.ConfigBuilder;
 import io.opentelemetry.sdk.OpenTelemetrySdk;
-import io.opentelemetry.sdk.OpenTelemetrySdkBuilder;
 import java.util.logging.ConsoleHandler;
+import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.SimpleFormatter;
 import java.util.regex.Pattern;
@@ -54,30 +54,27 @@ public class Configurator {
                 .readEnvironmentVariables()
                 .readSystemProperties()
                 .build());
-
         configureOtelLogging();
 
-        OpenTelemetrySdkBuilder sdkBuilder = OpenTelemetrySdk.builder();
-        initializeExporters(sdkBuilder, Config.get().getListProperty(EXPORTERS_CONFIG), Config.get().asJavaProperties());
-        initializePropagators(sdkBuilder, Config.get().getListProperty(PROPAGATORS_CONFIG));
-        sdkBuilder.buildAndRegisterGlobal();
+        OpenTelemetrySdk
+                .builder()
+                .setPropagators(configurePropagators(Config.get().getListProperty(PROPAGATORS_CONFIG)))
+                .setTracerProvider(configureExporters(Config.get().getListProperty(EXPORTERS_CONFIG), Config.get().asJavaProperties()))
+                .buildAndRegisterGlobal();
     }
 
     private static void configureOtelLogging() {
-        // otel and okhttp3 logging - java!
-        final ConsoleHandler consoleHandler = new ConsoleHandler();
-        consoleHandler.setLevel(Level.FINEST);
+        // otel logging - java.util.logging
+        Level level = getOtelLibLogLevel();
+        final Handler consoleHandler = new ConsoleHandler();
+        consoleHandler.setLevel(level);
         consoleHandler.setFormatter(new SimpleFormatter());
 
         final java.util.logging.Logger otel = java.util.logging.Logger.getLogger("io.opentelemetry");
-        otel.setLevel(getOtelLibLogLevel());
+        otel.setLevel(level);
         otel.addHandler(consoleHandler);
 
-        final java.util.logging.Logger okhttp3 = java.util.logging.Logger.getLogger("okhttp3");
-        okhttp3.setLevel(getOtelLibLogLevel());
-        okhttp3.addHandler(consoleHandler);
-
-        log.info("Configured OTEL library log level: {}", otel.getLevel());
+        log.info("Configured OTEL library log level: {}", level);
     }
 
     private static Level getOtelLibLogLevel() {
@@ -117,4 +114,3 @@ public class Configurator {
         return ENV_REPLACEMENT.matcher(propertyName.toUpperCase()).replaceAll("_");
     }
 }
-

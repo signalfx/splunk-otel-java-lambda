@@ -22,16 +22,16 @@ import io.opentelemetry.exporter.jaeger.thrift.JaegerThriftSpanExporterBuilder;
 import io.opentelemetry.exporter.logging.LoggingSpanExporter;
 import io.opentelemetry.exporter.otlp.trace.OtlpGrpcSpanExporter;
 import io.opentelemetry.exporter.zipkin.ZipkinSpanExporter;
-import io.opentelemetry.sdk.OpenTelemetrySdkBuilder;
 import io.opentelemetry.sdk.trace.SdkTracerProvider;
-import io.opentelemetry.sdk.trace.SdkTracerProviderBuilder;
-import io.opentelemetry.sdk.trace.export.BatchSpanProcessor;
+import io.opentelemetry.sdk.trace.SpanProcessor;
+import io.opentelemetry.sdk.trace.config.TraceConfig;
+import io.opentelemetry.sdk.trace.export.SimpleSpanProcessor;
 import io.opentelemetry.sdk.trace.export.SpanExporter;
+import io.opentelemetry.sdk.trace.samplers.Sampler;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
-import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,38 +39,52 @@ public class ExportersInitializer {
 
     private static final Logger log = LoggerFactory.getLogger(ExportersInitializer.class);
 
-    static synchronized void initializeExporters(OpenTelemetrySdkBuilder sdkBuilder, List<String> exporters, Properties config) {
+    static SdkTracerProvider configureExporters(List<String> exporters, Properties config) {
 
         log.debug("Installing exporters: {}", exporters);
-        SdkTracerProviderBuilder sdkTracerBuilder = SdkTracerProvider.builder();
+
+        List<SpanProcessor> spanProcessors = new ArrayList<>();
         for (String exporterName : exporters) {
-            installExporter(sdkTracerBuilder, exporterName, config, getSpanExporter(exporterName, config));
+            SpanProcessor exporter = createExporter(exporterName, config);
+            if (exporter != null) {
+                spanProcessors.add(exporter);
+            }
         }
-        sdkBuilder.setTracerProvider(sdkTracerBuilder.build());
+        TraceConfig traceConfig = TraceConfig.builder().setSampler(Sampler.alwaysOn()).build();
+
+        SdkTracerProvider result = SdkTracerProvider
+                .builder()
+                .addSpanProcessor(SpanProcessor.composite(spanProcessors))
+                .setTraceConfig(traceConfig)
+                .build();
+        return result;
+    }
+
+    private static SpanProcessor createExporter(String exporterName, Properties config) {
+
+        SpanExporter spanExporter = getSpanExporter(exporterName, config);
+        if (spanExporter != null) {
+            return SimpleSpanProcessor.builder(spanExporter).setExportOnlySampled(false).build();
+        }
+        log.warn("Exporter: {} not found", exporterName);
+        return null;
     }
 
     private static SpanExporter getSpanExporter(String exporterName, Properties config) {
 
         switch (exporterName) {
-            case "zipkin": return zipkinSpanExporter(config);
-            case "otlp": return otlpGrpcSpanExporter(config);
-            case "logging": return loggingSpanExporter(config);
-            case "jaeger": return jaegerGrpcSpanExporter(config);
-            case "jaeger-thrift": return jaegerThriftSpanExporter(config);
+            case "zipkin":
+                return zipkinSpanExporter(config);
+            case "otlp":
+                return otlpGrpcSpanExporter(config);
+            case "logging":
+                return loggingSpanExporter(config);
+            case "jaeger":
+                return jaegerGrpcSpanExporter(config);
+            case "jaeger-thrift":
+                return jaegerThriftSpanExporter(config);
         }
         return null;
-    }
-
-    private static void installExporter(SdkTracerProviderBuilder sdkTracerBuilder, String exporterName, Properties config, SpanExporter spanExporter) {
-
-        if (spanExporter != null) {
-            BatchSpanProcessor spanProcessor =
-                    BatchSpanProcessor.builder(spanExporter).readProperties(config).build();
-            sdkTracerBuilder.addSpanProcessor(spanProcessor);
-            log.debug("Installed span exporter: {}",  exporterName);
-        } else {
-            log.warn("Exporter: {} not found", exporterName);
-        }
     }
 
     private static SpanExporter jaegerGrpcSpanExporter(Properties config) {
@@ -81,18 +95,10 @@ public class ExportersInitializer {
         JaegerThriftSpanExporterBuilder builder = JaegerThriftSpanExporter.builder().readProperties(config);
         OkHttpClient client = new OkHttpClient.Builder()
                 .addInterceptor(new AuthTokenInterceptor())
-                .addInterceptor(getHttpLoggingInterceptor())
                 .build();
         HttpSender thriftSender = new HttpSender.Builder(config.getProperty("otel.exporter.jaeger.endpoint")).withClient(client).build();
         builder.setThriftSender(thriftSender);
         return builder.build();
-    }
-
-    @NotNull
-    private static HttpLoggingInterceptor getHttpLoggingInterceptor() {
-        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-        logging.setLevel(HttpLoggingInterceptor.Level.BASIC);
-        return logging;
     }
 
     private static SpanExporter loggingSpanExporter(Properties config) {

@@ -23,7 +23,6 @@ import io.opentelemetry.extension.trace.propagation.AwsXrayPropagator;
 import io.opentelemetry.extension.trace.propagation.B3Propagator;
 import io.opentelemetry.extension.trace.propagation.JaegerPropagator;
 import io.opentelemetry.extension.trace.propagation.OtTracerPropagator;
-import io.opentelemetry.sdk.OpenTelemetrySdkBuilder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -46,7 +45,7 @@ class PropagatorsInitializer {
           TEXTMAP_PROPAGATORS.put("xray", AwsXrayPropagator.getInstance());
   }
 
-  static void initializePropagators(OpenTelemetrySdkBuilder openTelemetrySdkBuilder, List<String> propagators) {
+  static ContextPropagators configurePropagators(List<String> propagators) {
 
     log.debug("Configuring propagators: {}", propagators);
 
@@ -66,6 +65,6 @@ class PropagatorsInitializer {
       contextPropagators = ContextPropagators.create(textPropagators.get(0));
     }
 
-    openTelemetrySdkBuilder.setPropagators(contextPropagators);
+    return contextPropagators;
   }
 }
