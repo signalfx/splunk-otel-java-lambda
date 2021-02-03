@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.splunk.support.lambda;
 
 import java.io.IOException;
@@ -24,28 +25,26 @@ import org.slf4j.LoggerFactory;
 
 public class AuthTokenInterceptor implements Interceptor {
 
-    private static final Logger log = LoggerFactory.getLogger(AuthTokenInterceptor.class.getName());
+  private static final Logger log = LoggerFactory.getLogger(AuthTokenInterceptor.class.getName());
 
-    static final String TOKEN_PROPERTY_NAME = "SIGNALFX_AUTH_TOKEN";
-    static final String TOKEN_HEADER = "X-SF-TOKEN";
+  static final String TOKEN_PROPERTY_NAME = "SIGNALFX_AUTH_TOKEN";
+  static final String TOKEN_HEADER = "X-SF-TOKEN";
 
-    @Override
-    public Response intercept(Chain chain) throws IOException {
-        Request request = chain.request();
+  @Override
+  public Response intercept(Chain chain) throws IOException {
+    Request request = chain.request();
 
-        String token = System.getenv(TOKEN_PROPERTY_NAME);
-        if (token != null) {
-            request = request.newBuilder()
-                    .addHeader(TOKEN_HEADER, token)
-                    .build();
-            log.debug("Executing call on {} using token {}", request.url(), maskToken(token));
-        } else {
-            log.debug("Auth token not configured as env property {}", TOKEN_PROPERTY_NAME);
-        }
-        return chain.proceed(request);
+    String token = System.getenv(TOKEN_PROPERTY_NAME);
+    if (token != null) {
+      request = request.newBuilder().addHeader(TOKEN_HEADER, token).build();
+      log.debug("Executing call on {} using token {}", request.url(), maskToken(token));
+    } else {
+      log.debug("Auth token not configured as env property {}", TOKEN_PROPERTY_NAME);
     }
+    return chain.proceed(request);
+  }
 
-    private String maskToken(String token) {
-        return token.charAt(0) + "******" + token.charAt(token.length() - 1);
-    }
+  private String maskToken(String token) {
+    return token.charAt(0) + "******" + token.charAt(token.length() - 1);
+  }
 }

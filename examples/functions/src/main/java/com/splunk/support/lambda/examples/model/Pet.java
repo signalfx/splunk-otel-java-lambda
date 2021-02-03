@@ -1,55 +1,55 @@
 /*
- * Copyright 2016 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * Copyright Splunk Inc.
  *
- * Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance
- * with the License. A copy of the License is located at
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * http://aws.amazon.com/apache2.0/
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * or in the "license" file accompanying this file. This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES
- * OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions
- * and limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 package com.splunk.support.lambda.examples.model;
 
-import java.util.Date;
-
-
 public class Pet {
-    private String id;
-    private String breed;
-    private String name;
-    private Date dateOfBirth;
+  private String id;
+  private String breed;
+  private String name;
 
-    public String getId() {
-        return id;
-    }
+  public Pet() {}
 
-    public void setId(String id) {
-        this.id = id;
-    }
+  public Pet(String id, String breed, String name) {
+    this.id = id;
+    this.name = name;
+    this.breed = breed;
+  }
 
-    public String getBreed() {
-        return breed;
-    }
+  public String getId() {
+    return id;
+  }
 
-    public void setBreed(String breed) {
-        this.breed = breed;
-    }
+  public void setId(String id) {
+    this.id = id;
+  }
 
-    public String getName() {
-        return name;
-    }
+  public String getBreed() {
+    return breed;
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  public void setBreed(String breed) {
+    this.breed = breed;
+  }
 
-    public Date getDateOfBirth() {
-        return dateOfBirth;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public void setDateOfBirth(Date dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 }

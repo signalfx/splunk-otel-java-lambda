@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.splunk.support.lambda;
 
 import io.jaegertracing.thrift.internal.senders.HttpSender;
@@ -37,79 +38,82 @@ import org.slf4j.LoggerFactory;
 
 public class ExportersInitializer {
 
-    private static final Logger log = LoggerFactory.getLogger(ExportersInitializer.class);
+  private static final Logger log = LoggerFactory.getLogger(ExportersInitializer.class);
 
-    static SdkTracerProvider configureExporters(List<String> exporters, Properties config) {
+  static SdkTracerProvider configureExporters(List<String> exporters, Properties config) {
 
-        log.debug("Installing exporters: {}", exporters);
+    log.debug("Installing exporters: {}", exporters);
 
-        List<SpanProcessor> spanProcessors = new ArrayList<>();
-        for (String exporterName : exporters) {
-            SpanProcessor exporter = createExporter(exporterName, config);
-            if (exporter != null) {
-                spanProcessors.add(exporter);
-            }
-        }
-        TraceConfig traceConfig = TraceConfig.builder().setSampler(Sampler.alwaysOn()).build();
-
-        SdkTracerProvider result = SdkTracerProvider
-                .builder()
-                .addSpanProcessor(SpanProcessor.composite(spanProcessors))
-                .setTraceConfig(traceConfig)
-                .build();
-        return result;
+    List<SpanProcessor> spanProcessors = new ArrayList<>();
+    for (String exporterName : exporters) {
+      SpanProcessor exporter = createExporter(exporterName, config);
+      if (exporter != null) {
+        spanProcessors.add(exporter);
+      }
     }
+    TraceConfig traceConfig = TraceConfig.builder().setSampler(Sampler.alwaysOn()).build();
 
-    private static SpanProcessor createExporter(String exporterName, Properties config) {
+    SdkTracerProvider result =
+        SdkTracerProvider.builder()
+            .addSpanProcessor(SpanProcessor.composite(spanProcessors))
+            .setTraceConfig(traceConfig)
+            .build();
+    return result;
+  }
 
-        SpanExporter spanExporter = getSpanExporter(exporterName, config);
-        if (spanExporter != null) {
-            return SimpleSpanProcessor.builder(spanExporter).setExportOnlySampled(false).build();
-        }
-        log.warn("Exporter: {} not found", exporterName);
-        return null;
+  private static SpanProcessor createExporter(String exporterName, Properties config) {
+
+    SpanExporter spanExporter = getSpanExporter(exporterName, config);
+    if (spanExporter != null) {
+      return SimpleSpanProcessor.builder(spanExporter).setExportOnlySampled(false).build();
     }
+    log.warn("Exporter: {} not found", exporterName);
+    return null;
+  }
 
-    private static SpanExporter getSpanExporter(String exporterName, Properties config) {
+  private static SpanExporter getSpanExporter(String exporterName, Properties config) {
 
-        switch (exporterName) {
-            case "zipkin":
-                return zipkinSpanExporter(config);
-            case "otlp":
-                return otlpGrpcSpanExporter(config);
-            case "logging":
-                return loggingSpanExporter(config);
-            case "jaeger":
-                return jaegerGrpcSpanExporter(config);
-            case "jaeger-thrift":
-                return jaegerThriftSpanExporter(config);
-        }
-        return null;
+    switch (exporterName) {
+      case "zipkin":
+        return zipkinSpanExporter(config);
+      case "otlp":
+        return otlpGrpcSpanExporter(config);
+      case "logging":
+        return loggingSpanExporter(config);
+      case "jaeger":
+        return jaegerGrpcSpanExporter(config);
+      case "jaeger-thrift":
+        return jaegerThriftSpanExporter(config);
     }
+    return null;
+  }
 
-    private static SpanExporter jaegerGrpcSpanExporter(Properties config) {
-        return JaegerGrpcSpanExporter.builder().readProperties(config).build();
-    }
+  private static SpanExporter jaegerGrpcSpanExporter(Properties config) {
+    return JaegerGrpcSpanExporter.builder().readProperties(config).build();
+  }
 
-    private static SpanExporter jaegerThriftSpanExporter(Properties config) {
-        JaegerThriftSpanExporterBuilder builder = JaegerThriftSpanExporter.builder().readProperties(config);
-        OkHttpClient client = new OkHttpClient.Builder()
-                .addInterceptor(new AuthTokenInterceptor())
-                .build();
-        HttpSender thriftSender = new HttpSender.Builder(config.getProperty("otel.exporter.jaeger.endpoint")).withClient(client).build();
-        builder.setThriftSender(thriftSender);
-        return builder.build();
-    }
+  private static SpanExporter jaegerThriftSpanExporter(Properties config) {
+    JaegerThriftSpanExporterBuilder builder =
+        JaegerThriftSpanExporter.builder().readProperties(config);
+    OkHttpClient client =
+        new OkHttpClient.Builder().addInterceptor(new AuthTokenInterceptor()).build();
+    HttpSender thriftSender =
+        new HttpSender.Builder(config.getProperty("otel.exporter.jaeger.endpoint"))
+            .withClient(client)
+            .build();
+    builder.setThriftSender(thriftSender);
+    return builder.build();
+  }
 
-    private static SpanExporter loggingSpanExporter(Properties config) {
-        return new LoggingSpanExporter();
-    }
+  private static SpanExporter loggingSpanExporter(Properties config) {
+    return new LoggingSpanExporter();
+  }
 
-    private static SpanExporter otlpGrpcSpanExporter(Properties config) {
-        return OtlpGrpcSpanExporter.builder().readProperties(config).build();
-    }
+  private static SpanExporter otlpGrpcSpanExporter(Properties config) {
+    return OtlpGrpcSpanExporter.builder().readProperties(config).build();
+  }
 
-    private static SpanExporter zipkinSpanExporter(Properties config) {
-        return ZipkinSpanExporter.builder().readProperties(config).build();
-    }
+  private static SpanExporter zipkinSpanExporter(Properties config) {
+    return ZipkinSpanExporter.builder().readProperties(config).build();
+  }
 }

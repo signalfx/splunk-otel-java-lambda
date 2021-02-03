@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.splunk.support.lambda;
 
 import io.opentelemetry.api.baggage.propagation.W3CBaggagePropagator;
@@ -33,16 +34,17 @@ import org.slf4j.LoggerFactory;
 class PropagatorsInitializer {
 
   private static final Logger log = LoggerFactory.getLogger(PropagatorsInitializer.class);
-  
+
   private static final Map<String, TextMapPropagator> TEXTMAP_PROPAGATORS = new HashMap<>();
+
   static {
-          TEXTMAP_PROPAGATORS.put("tracecontext", W3CTraceContextPropagator.getInstance());
-          TEXTMAP_PROPAGATORS.put("baggage", W3CBaggagePropagator.getInstance());
-          TEXTMAP_PROPAGATORS.put("b3", B3Propagator.getInstance());
-          TEXTMAP_PROPAGATORS.put("b3multi", B3Propagator.builder().injectMultipleHeaders().build());
-          TEXTMAP_PROPAGATORS.put("jaeger", JaegerPropagator.getInstance());
-          TEXTMAP_PROPAGATORS.put("ottracer", OtTracerPropagator.getInstance());
-          TEXTMAP_PROPAGATORS.put("xray", AwsXrayPropagator.getInstance());
+    TEXTMAP_PROPAGATORS.put("tracecontext", W3CTraceContextPropagator.getInstance());
+    TEXTMAP_PROPAGATORS.put("baggage", W3CBaggagePropagator.getInstance());
+    TEXTMAP_PROPAGATORS.put("b3", B3Propagator.getInstance());
+    TEXTMAP_PROPAGATORS.put("b3multi", B3Propagator.builder().injectMultipleHeaders().build());
+    TEXTMAP_PROPAGATORS.put("jaeger", JaegerPropagator.getInstance());
+    TEXTMAP_PROPAGATORS.put("ottracer", OtTracerPropagator.getInstance());
+    TEXTMAP_PROPAGATORS.put("xray", AwsXrayPropagator.getInstance());
   }
 
   static ContextPropagators configurePropagators(List<String> propagators) {
