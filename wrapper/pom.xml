@@ -16,6 +16,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <otel.instrumentation.version>0.14.0</otel.instrumentation.version>
         <otel.version>0.14.1</otel.version>
+        <spotless-maven-plugin.version>2.7.0</spotless-maven-plugin.version>
     </properties>
 
     <licenses>
@@ -282,6 +283,41 @@
             <plugin>
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <version>2.22.2</version>
+            </plugin>
+            <plugin>
+                <groupId>com.diffplug.spotless</groupId>
+                <artifactId>spotless-maven-plugin</artifactId>
+                <version>${spotless-maven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>check</id>
+                        <goals><goal>check</goal></goals>
+                        <phase>verify</phase>
+                    </execution>
+                </executions>
+                <configuration>
+                    <formats>
+                        <format>
+                            <includes>
+                                <include>*.md</include>
+                                <include>.gitignore</include>
+                                <include>*.sh</include>
+                            </includes>
+                            <trimTrailingWhitespace/>
+                            <endWithNewline/>
+                            <indent>
+                                <spaces>true</spaces>
+                                <spacesPerTab>2</spacesPerTab>
+                            </indent>
+                        </format>
+                    </formats>
+                    <java>
+                        <googleJavaFormat></googleJavaFormat>
+                        <licenseHeader>
+                            <file>${basedir}/spotless.license.java</file>
+                        </licenseHeader>
+                    </java>
+                </configuration>
             </plugin>
         </plugins>
     </build>

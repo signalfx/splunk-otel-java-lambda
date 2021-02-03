@@ -24,7 +24,7 @@ $ sam build && sam deploy --resolve-s3
 
 This command compiles the application and prepares a deployment package in the `.aws-sam` sub-directory. Then the package is deployed according to `samconfig.toml`
 
-## Testing 
+## Testing
 
 ### Event based non-stream wrapper (String-typed lambda)
 

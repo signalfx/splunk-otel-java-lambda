@@ -13,10 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.splunk.support.lambda;
 
-public class TracingRequestApiGatewayWrapper extends io.opentelemetry.instrumentation.awslambda.v1_0.TracingRequestApiGatewayWrapper {
-    static {
-        Configurator.configure();
-    }
+public class TracingRequestApiGatewayWrapper
+    extends io.opentelemetry.instrumentation.awslambda.v1_0.TracingRequestApiGatewayWrapper {
+  static {
+    Configurator.configure();
+  }
 }

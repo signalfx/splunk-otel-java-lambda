@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.splunk.support.lambda.examples;
 
 import io.opentelemetry.context.propagation.ContextPropagators;
@@ -26,38 +27,34 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
-/**
- * Configures:
- * - B3 inbound context propagation
- * - logging exporter
- * - debug / finest logging
- *
- */
+/** Configures: - B3 inbound context propagation - logging exporter - debug / finest logging */
 public final class LambdaConfiguration {
 
-    public static void configure() {
+  public static void configure() {
 
-        configureOpenTelemetry();
-        configureLogging();
-    }
+    configureOpenTelemetry();
+    configureLogging();
+  }
 
-    private static void configureLogging() {
-        // otel logging - java!
-        final ConsoleHandler consoleHandler = new ConsoleHandler();
-        consoleHandler.setLevel(Level.FINEST);
-        consoleHandler.setFormatter(new SimpleFormatter());
+  private static void configureLogging() {
+    // otel logging - java!
+    final ConsoleHandler consoleHandler = new ConsoleHandler();
+    consoleHandler.setLevel(Level.FINEST);
+    consoleHandler.setFormatter(new SimpleFormatter());
 
-        final Logger otel = Logger.getLogger("io.opentelemetry");
-        otel.setLevel(Level.FINEST);
-        otel.addHandler(consoleHandler);
-    }
+    final Logger otel = Logger.getLogger("io.opentelemetry");
+    otel.setLevel(Level.FINEST);
+    otel.addHandler(consoleHandler);
+  }
 
-    private static void configureOpenTelemetry() {
+  private static void configureOpenTelemetry() {
 
-        OpenTelemetrySdk
-                .builder()
-                .setPropagators(ContextPropagators.create(B3Propagator.getInstance()))
-                .setTracerProvider(SdkTracerProvider.builder().addSpanProcessor(SimpleSpanProcessor.create(new LoggingSpanExporter())).build())
-                .buildAndRegisterGlobal();
-    }
+    OpenTelemetrySdk.builder()
+        .setPropagators(ContextPropagators.create(B3Propagator.getInstance()))
+        .setTracerProvider(
+            SdkTracerProvider.builder()
+                .addSpanProcessor(SimpleSpanProcessor.create(new LoggingSpanExporter()))
+                .build())
+        .buildAndRegisterGlobal();
+  }
 }
