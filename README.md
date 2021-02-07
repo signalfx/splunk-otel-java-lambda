@@ -51,7 +51,7 @@ template. For more information, see the [example](./examples/splunk-wrapper/READ
    Gradle:
    ```
    dependencies {
-     implementation("com.splunk.public:otel-lambda-wrapper:0.0.1")
+     implementation("com.splunk.public:otel-lambda-wrapper:0.0.4")
    }
    ```
 
@@ -60,7 +60,7 @@ template. For more information, see the [example](./examples/splunk-wrapper/READ
    <dependency>
      <groupId>com.splunk.public</groupId>
      <artifactId>otel-lambda-wrapper</artifactId>
-     <version>0.0.1</version>
+     <version>0.0.4</version>
    </dependency>
    ```
 2. From the AWS console, upload the .zip file to your Lambda function code.
@@ -75,10 +75,10 @@ template. For more information, see the [example](./examples/splunk-wrapper/READ
    | `com.splunk.support.lambda.TracingRequestStreamWrapper` | Wrap a streaming handler and enable HTTP context propagation for HTTP requests. |
 
    For more information about setting a handler for your Lambda function in the AWS console, see [Configuring functions in the console](https://docs.aws.amazon.com/lambda/latest/dg/configuration-console.html) on the AWS website.
-4. Set the `OTEL_LAMBDA_HANDLER` environment variable in your Lambda function
+4. Set the `OTEL_INSTRUMENTATION_AWS_LAMBDA_HANDLER` environment variable in your Lambda function
    code:
    ```
-   OTEL_LAMBDA_HANDLER="package.ClassName::methodName"
+   OTEL_INSTRUMENTATION_AWS_LAMBDA_HANDLER="package.ClassName::methodName"
    ```
    For more information about setting environment variables in the AWS console,
    see [Using AWS Lambda environment variables](https://docs.aws.amazon.com/lambda/latest/dg/configuration-envvars.html)
@@ -96,6 +96,12 @@ template. For more information, see the [example](./examples/splunk-wrapper/READ
    OTEL_EXPORTER_JAEGER_SERVICE_NAME="serviceName"
    SIGNALFX_AUTH_TOKEN="orgAccessToken"
    ```
+   Also, you can set span flush wait timeout, that is max time the function will wait for the spans to be ingested by the Splunk APM. Default is 1 second. 
+   Timeout is controlled with a following property (value in seconds):
+   ```
+   OTEL_INSTRUMENTATION_AWS_LAMBDA_FLUSH_TIMEOUT: 30
+   ```
+   
    If you want to use a different exporter, set the `OTEL_EXPORTERS`
    environment variable. Other exporters have their own configuration settings.
    For more information, see the [OpenTelemetry Instrumentation for Java](https://github.com/open-telemetry/opentelemetry-java-instrumentation)
@@ -104,7 +110,7 @@ template. For more information, see the [example](./examples/splunk-wrapper/READ
    `OTEL_RESOURCE_ATTRIBUTES` environment variable:
    ```
    OTEL_RESOURCE_ATTRIBUTES="environment=yourEnvironment"
-   ```
+   ```   
 8. Save your settings and call the Lambda function.
 
 ## Deploy the wrapper with a Lambda layer
@@ -159,12 +165,12 @@ These environment variables control logging:
 
 | Environment variable | Description |
 | -------------------- | ----------- |
-| `OTEL_LIB_LOG_LEVEL` | Controls logging for the OpenTelemetry library itself. By default, it's set to `WARNING` and uses `java.util.logging` values. |
+| `OTEL_LIB_LOG_LEVEL` | Controls logging for the OpenTelemetry library. By default, it's set to `WARNING` and uses `java.util.logging` values. |
 | `OTEL_LAMBDA_LOG_LEVEL` | Controls logging of the Splunk Lambda wrapper. By default, it's set to `WARN` and uses `log4j2` values.
 
 ## License and versioning
 
 The Splunk OpenTelemetry Java Lambda Wrapper uses the
-[OpenTelemetry Instrumentation for Java](https://github.com/open-telemetry/opentelemetry-java-instrumentation),
-which is released under the terms of the Apache Software License version 2.0.
+[OpenTelemetry Instrumentation for Java](https://github.com/open-telemetry/opentelemetry-java-instrumentation), [OpenTelemetry Java SDK and extensions](https://github.com/open-telemetry/opentelemetry-java), 
+all released under the terms of the Apache Software License version 2.0.
 For more information, see the [license](./LICENSE) file.

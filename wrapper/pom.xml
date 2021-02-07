@@ -6,7 +6,7 @@
     <groupId>com.signalfx.public</groupId>
     <artifactId>otel-java-lambda-wrapper</artifactId>
     <packaging>jar</packaging>
-    <version>0.0.2-SNAPSHOT</version>
+    <version>0.0.4-SNAPSHOT</version>
     <name>Splunk OTEL-based Lambda Wrapper</name>
     <description>
         Splunk release of the OpenTelemetry Java Lambda Wrapper
@@ -14,8 +14,9 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <otel.instrumentation.version>0.12.0</otel.instrumentation.version>
-        <otel.version>0.12.0</otel.version>
+        <otel.instrumentation.version>0.14.0</otel.instrumentation.version>
+        <otel.version>0.14.1</otel.version>
+        <spotless-maven-plugin.version>2.7.0</spotless-maven-plugin.version>
     </properties>
 
     <licenses>
@@ -164,7 +165,7 @@
         <dependency>
             <groupId>io.jaegertracing</groupId>
             <artifactId>jaeger-thrift</artifactId>
-            <version>0.33.1</version>
+            <version>1.5.0</version>
         </dependency>
         <dependency>
             <groupId>io.opentelemetry</groupId>
@@ -174,11 +175,6 @@
         <dependency>
             <groupId>io.opentelemetry</groupId>
             <artifactId>opentelemetry-exporter-zipkin</artifactId>
-            <version>${otel.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.opentelemetry</groupId>
-            <artifactId>opentelemetry-exporter-prometheus</artifactId>
             <version>${otel.version}</version>
         </dependency>
 
@@ -203,18 +199,25 @@
             <version>3.3.3</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.2.3</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <repositories>
         <repository>
-            <id>bintray</id>
-            <url>https://dl.bintray.com/open-telemetry/maven</url>
+            <id>jfrog-oss</id>
+            <url>https://oss.jfrog.org/libs-snapshot</url>
+            <snapshots></snapshots>
             <releases></releases>
         </repository>
         <repository>
-            <id>oss-snapshots</id>
-            <url>https://oss.jfrog.org/artifactory/oss-snapshot-local</url>
-            <snapshots></snapshots>
+            <id>bintray</id>
+            <url>https://dl.bintray.com/open-telemetry/maven</url>
+            <releases></releases>
         </repository>
     </repositories>
 
@@ -280,6 +283,41 @@
             <plugin>
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <version>2.22.2</version>
+            </plugin>
+            <plugin>
+                <groupId>com.diffplug.spotless</groupId>
+                <artifactId>spotless-maven-plugin</artifactId>
+                <version>${spotless-maven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>check</id>
+                        <goals><goal>check</goal></goals>
+                        <phase>verify</phase>
+                    </execution>
+                </executions>
+                <configuration>
+                    <formats>
+                        <format>
+                            <includes>
+                                <include>*.md</include>
+                                <include>.gitignore</include>
+                                <include>*.sh</include>
+                            </includes>
+                            <trimTrailingWhitespace/>
+                            <endWithNewline/>
+                            <indent>
+                                <spaces>true</spaces>
+                                <spacesPerTab>2</spacesPerTab>
+                            </indent>
+                        </format>
+                    </formats>
+                    <java>
+                        <googleJavaFormat></googleJavaFormat>
+                        <licenseHeader>
+                            <file>${basedir}/spotless.license.java</file>
+                        </licenseHeader>
+                    </java>
+                </configuration>
             </plugin>
         </plugins>
     </build>

@@ -1,27 +1,9 @@
-plugins {
-  id "java-library"
-}
-
 group = 'com.splunk.public'
 description = "Splunk OTEL Java Lambda Wrapper Examples - splunk wrapper direct usage"
 
-java {
-  sourceCompatibility = JavaVersion.VERSION_1_8
-  targetCompatibility = JavaVersion.VERSION_1_8
-}
-
-repositories {
-  jcenter()
-  mavenLocal()
-  mavenCentral()
-  maven {
-    url "https://dl.bintray.com/open-telemetry/maven"
-  }
-}
-
 dependencies {
   api project(':functions')
-  implementation('com.signalfx.public:otel-java-lambda-wrapper:0.0.1')
+  implementation("com.signalfx.public:otel-java-lambda-wrapper:${versions.wrapper}")
 }
 
 task buildZip(type: Zip) {

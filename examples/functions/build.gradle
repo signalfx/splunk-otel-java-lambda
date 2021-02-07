@@ -1,20 +1,5 @@
-plugins {
-  id "java"
-}
-
 group = 'com.splunk.public'
 description = "Splunk OTEL Java Lambda Wrapper Examples - test functions code"
-
-java {
-  sourceCompatibility = JavaVersion.VERSION_1_8
-  targetCompatibility = JavaVersion.VERSION_1_8
-}
-
-repositories {
-  jcenter()
-  mavenLocal()
-  mavenCentral()
-}
 
 dependencies {
   compile(

@@ -21,7 +21,8 @@ Resources:
       Timeout: 60
       Environment:
         Variables:
-          OTEL_LAMBDA_HANDLER: com.splunk.support.lambda.examples.ApiGatewayRequestFunction::handleRequest
+          OTEL_INSTRUMENTATION_AWS_LAMBDA_HANDLER: com.splunk.support.lambda.examples.ApiGatewayRequestFunction::handleRequest
+          OTEL_INSTRUMENTATION_AWS_LAMBDA_FLUSH_TIMEOUT: 30
       Events:
         RequestApiGatewayWrapperFunctionApiCall:
           Type: Api
@@ -42,7 +43,8 @@ Resources:
       Timeout: 60
       Environment:
         Variables:
-          OTEL_LAMBDA_HANDLER: com.splunk.support.lambda.examples.ApiGatewayRequestStreamFunction::handleRequest
+          OTEL_INSTRUMENTATION_AWS_LAMBDA_HANDLER: com.splunk.support.lambda.examples.ApiGatewayRequestStreamFunction::handleRequest
+          OTEL_INSTRUMENTATION_AWS_LAMBDA_FLUSH_TIMEOUT: 30
       Events:
         PetsList:
           Type: Api
@@ -68,7 +70,8 @@ Resources:
       Timeout: 60
       Environment:
         Variables:
-          OTEL_LAMBDA_HANDLER: com.splunk.support.lambda.examples.RequestFunction::handleRequest
+          OTEL_INSTRUMENTATION_AWS_LAMBDA_HANDLER: com.splunk.support.lambda.examples.RequestFunction::handleRequest
+          OTEL_INSTRUMENTATION_AWS_LAMBDA_FLUSH_TIMEOUT: 30
 
   # Event based streaming wrapper (no HTTP propagation)
   OtelRequestStreamFunction:
@@ -83,7 +86,8 @@ Resources:
       Timeout: 60
       Environment:
         Variables:
-          OTEL_LAMBDA_HANDLER: com.splunk.support.lambda.examples.RequestStreamFunction::handleRequest
+          OTEL_INSTRUMENTATION_AWS_LAMBDA_HANDLER: com.splunk.support.lambda.examples.RequestStreamFunction::handleRequest
+          OTEL_INSTRUMENTATION_AWS_LAMBDA_FLUSH_TIMEOUT: 30
 
 Outputs:
   LambdaTestApi:

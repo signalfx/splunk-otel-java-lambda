@@ -1,2 +1,41 @@
+plugins {
+    id "java"
+    id "com.diffplug.spotless" version "5.2.0" apply false
+}
+
 group = 'com.splunk.public'
 description = "Splunk OTEL Java Lambda Wrapper Examples"
+
+ext {
+    versions = [
+            opentelemetry: '0.14.1',
+            instrumentation: '0.14.0',
+            wrapper: '0.0.4-SNAPSHOT'
+    ]
+}
+
+subprojects {
+    version = rootProject.version
+
+    apply plugin: 'java'
+    apply plugin: 'java-library'
+    apply plugin: 'com.diffplug.spotless'
+    apply from: "$rootDir/gradle/spotless.gradle"
+
+    java {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+
+    repositories {
+        jcenter()
+        mavenLocal()
+        mavenCentral()
+        maven {
+            url "https://dl.bintray.com/open-telemetry/maven"
+        }
+        maven {
+            url "https://oss.jfrog.org/libs-snapshot"
+        }
+    }
+}
