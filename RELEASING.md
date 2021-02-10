@@ -8,7 +8,7 @@ Full release procedure is as follows:
 * Update wrapper POM version to release (remove -SNAPSHOT)
 * Set wrapper dependency for examples to release (`examples/build.gradle`)
 * Commit / push / merge PR
-* Tag that version (eg `v0.0.5` - min `v` prefix!) with the [annotated tag](https://git-scm.com/book/en/v2/Git-Basics-Tagging) and `git push origin <tagname>` 
+* Tag that version (eg `v0.0.5` - mind `v` prefix!) with the [annotated tag](https://git-scm.com/book/en/v2/Git-Basics-Tagging) and `git push origin <tagname>` 
 * tag will run the release workflow that needs to be *approved* by a maintainer 
 * Update wrapper POM version to next `-SNAPSHOT` 
 * Set wrapper dependency for examples to next snahpshot (`examples/build.gradle`)
