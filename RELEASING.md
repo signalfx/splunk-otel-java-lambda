@@ -1,8 +1,6 @@
 ## Releasing a new version
 
-[This GitHub Action](.github/workflows/release.yaml) builds, and releases to both OSS Maven2 repo and Github a new version of
-the wrapper
-whenever a new tag is pushed to the repository.
+[This GitHub Action](.github/workflows/release.yaml) builds, and releases a new version of the wrapper to both Maven Central and Github whenever a new tag is pushed to the repository.
 
 Full release procedure is as follows:
 
@@ -17,7 +15,7 @@ Full release procedure is as follows:
 * Update main `README.MD` and `outbound-context-propagation.md` files with new version number (sans -SNAPSHOT)
 * Commit / push / merge PR
 
-After the release is completed successfully, following should happen:
+After the release is completed successfully, the following should happen:
 * Github tag / release created
 * Central Maven repo updated with the new release of `com.signalfx.public:otel-java-lambda-wrapper`  
 * `README.MD` and `outbound-context-propagation.md` mentioning next release (sans -SNAPSHOT)
