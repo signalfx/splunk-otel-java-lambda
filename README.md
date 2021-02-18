@@ -51,15 +51,15 @@ template. For more information, see the [example](./examples/splunk-wrapper/READ
    Gradle:
    ```
    dependencies {
-     implementation("com.splunk.public:otel-lambda-wrapper:0.0.4")
+     implementation("com.signalfx.public:otel-java-lambda-wrapper:0.0.4")
    }
    ```
 
    Maven:
    ```
    <dependency>
-     <groupId>com.splunk.public</groupId>
-     <artifactId>otel-lambda-wrapper</artifactId>
+     <groupId>com.signalfx.public</groupId>
+     <artifactId>otel-java-lambda-wrapper</artifactId>
      <version>0.0.4</version>
    </dependency>
    ```
