@@ -14,8 +14,9 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <otel.instrumentation.version>0.14.0</otel.instrumentation.version>
-        <otel.version>0.14.1</otel.version>
+        <otel.instrumentation.version>0.17.0-alpha</otel.instrumentation.version>
+        <otel.version>0.17.1</otel.version>
+        <otel.version.alpha>0.17.1-alpha</otel.version.alpha>
         <spotless-maven-plugin.version>2.7.0</spotless-maven-plugin.version>
     </properties>
 
@@ -124,39 +125,36 @@
             <artifactId>opentelemetry-aws-lambda-1.0</artifactId>
             <version>${otel.instrumentation.version}</version>
         </dependency>
+        <!-- OTEL SDK -->
         <dependency>
             <groupId>io.opentelemetry</groupId>
             <artifactId>opentelemetry-sdk</artifactId>
             <version>${otel.version}</version>
         </dependency>
         <dependency>
+            <groupId>io.opentelemetry.javaagent</groupId>
+            <artifactId>opentelemetry-javaagent-spi</artifactId>
+            <version>${otel.instrumentation.version}</version>
+        </dependency>
+        <dependency>
             <groupId>io.opentelemetry</groupId>
-            <artifactId>opentelemetry-extension-trace-propagators</artifactId>
-            <version>${otel.version}</version>
+            <artifactId>opentelemetry-sdk-extension-autoconfigure</artifactId>
+            <version>${otel.version.alpha}</version>
         </dependency>
         <dependency>
             <groupId>io.opentelemetry</groupId>
             <artifactId>opentelemetry-sdk-extension-resources</artifactId>
             <version>${otel.version}</version>
         </dependency>
+        <!-- AUTO SERVICE - for SDK -->
         <dependency>
-            <groupId>io.opentelemetry</groupId>
-            <artifactId>opentelemetry-sdk-extension-aws</artifactId>
-            <version>${otel.version}</version>
+            <groupId>com.google.auto.service</groupId>
+            <artifactId>auto-service</artifactId>
+            <version>1.0-rc7</version>
         </dependency>
         <!--
             EXPORTERS
         -->
-        <dependency>
-            <groupId>io.opentelemetry</groupId>
-            <artifactId>opentelemetry-exporter-logging</artifactId>
-            <version>${otel.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.opentelemetry</groupId>
-            <artifactId>opentelemetry-exporter-jaeger</artifactId>
-            <version>${otel.version}</version>
-        </dependency>
         <dependency>
             <groupId>io.opentelemetry</groupId>
             <artifactId>opentelemetry-exporter-jaeger-thrift</artifactId>
@@ -169,12 +167,35 @@
         </dependency>
         <dependency>
             <groupId>io.opentelemetry</groupId>
+            <artifactId>opentelemetry-exporter-logging</artifactId>
+            <version>${otel.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.opentelemetry</groupId>
+            <artifactId>opentelemetry-exporter-jaeger</artifactId>
+            <version>${otel.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.opentelemetry</groupId>
             <artifactId>opentelemetry-exporter-otlp</artifactId>
             <version>${otel.version}</version>
         </dependency>
         <dependency>
             <groupId>io.opentelemetry</groupId>
             <artifactId>opentelemetry-exporter-zipkin</artifactId>
+            <version>${otel.version}</version>
+        </dependency>
+        <!--
+            PROPAGATORS
+        -->
+        <dependency>
+            <groupId>io.opentelemetry</groupId>
+            <artifactId>opentelemetry-extension-trace-propagators</artifactId>
+            <version>${otel.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.opentelemetry</groupId>
+            <artifactId>opentelemetry-sdk-extension-aws</artifactId>
             <version>${otel.version}</version>
         </dependency>
 

@@ -14,37 +14,28 @@
  * limitations under the License.
  */
 
-package com.splunk.support.lambda;
+package com.splunk.support.lambda.configuration;
+
+import static java.util.Objects.requireNonNull;
 
 import java.io.IOException;
 import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-public class AuthTokenInterceptor implements Interceptor {
-
-  private static final Logger log = LoggerFactory.getLogger(AuthTokenInterceptor.class.getName());
-
-  static final String TOKEN_PROPERTY_NAME = "SIGNALFX_AUTH_TOKEN";
+class AuthTokenInterceptor implements Interceptor {
   static final String TOKEN_HEADER = "X-SF-TOKEN";
+
+  private final String signalfxAuthToken;
+
+  AuthTokenInterceptor(String token) {
+    this.signalfxAuthToken = requireNonNull(token);
+  }
 
   @Override
   public Response intercept(Chain chain) throws IOException {
     Request request = chain.request();
-
-    String token = System.getenv(TOKEN_PROPERTY_NAME);
-    if (token != null) {
-      request = request.newBuilder().addHeader(TOKEN_HEADER, token).build();
-      log.debug("Executing call on {} using token {}", request.url(), maskToken(token));
-    } else {
-      log.debug("Auth token not configured as env property {}", TOKEN_PROPERTY_NAME);
-    }
+    request = request.newBuilder().addHeader(TOKEN_HEADER, signalfxAuthToken).build();
     return chain.proceed(request);
-  }
-
-  private String maskToken(String token) {
-    return token.charAt(0) + "******" + token.charAt(token.length() - 1);
   }
 }

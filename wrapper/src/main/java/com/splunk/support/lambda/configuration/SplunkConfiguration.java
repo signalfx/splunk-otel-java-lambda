@@ -14,32 +14,28 @@
  * limitations under the License.
  */
 
-package com.splunk.support.lambda;
+package com.splunk.support.lambda.configuration;
 
-import static com.splunk.support.lambda.ExportersInitializer.configureExporters;
-import static com.splunk.support.lambda.PropagatorsInitializer.configurePropagators;
+import static com.splunk.support.lambda.configuration.JaegerThriftSpanExporterFactory.OTEL_EXPORTER_JAEGER_ENDPOINT;
 
-import io.opentelemetry.instrumentation.api.config.Config;
-import io.opentelemetry.instrumentation.api.config.ConfigBuilder;
-import io.opentelemetry.sdk.OpenTelemetrySdk;
+import com.google.auto.service.AutoService;
+import io.opentelemetry.javaagent.spi.config.PropertySource;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.SimpleFormatter;
-import java.util.regex.Pattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Configurator {
+@AutoService(PropertySource.class)
+public class SplunkConfiguration implements PropertySource {
 
-  private static final Logger log = LoggerFactory.getLogger(Configurator.class);
-
-  private static final String EXPORTERS_CONFIG = "otel.exporter";
-  private static final String PROPAGATORS_CONFIG = "otel.propagators";
+  private static final Logger log = LoggerFactory.getLogger(SplunkConfiguration.class);
 
   static final String OTEL_LIB_LOG_LEVEL = "OTEL_LIB_LOG_LEVEL";
 
-  // Disable all non-lambda AWS resources to make startup faster
   private static final String DISABLED_RESOURCE_PROVIDERS =
       String.join(
           ",",
@@ -51,17 +47,7 @@ public class Configurator {
           "io.opentelemetry.sdk.extension.aws.resource.EksResource");
 
   public static void configure() {
-    setDefaultValues();
-    Config.internalInitializeConfig(
-        new ConfigBuilder().readEnvironmentVariables().readSystemProperties().build());
     configureOtelLogging();
-
-    OpenTelemetrySdk.builder()
-        .setPropagators(configurePropagators(Config.get().getListProperty(PROPAGATORS_CONFIG)))
-        .setTracerProvider(
-            configureExporters(
-                Config.get().getListProperty(EXPORTERS_CONFIG), Config.get().asJavaProperties()))
-        .buildAndRegisterGlobal();
   }
 
   private static void configureOtelLogging() {
@@ -90,28 +76,27 @@ public class Configurator {
     return Level.WARNING;
   }
 
-  private static void setDefaultValues() {
-    setDefaultValue("otel.propagators", "b3");
-    setDefaultValue("otel.exporter", "jaeger-thrift");
-    setDefaultValue("otel.exporter.jaeger.endpoint", "http://localhost:9080/v1/trace");
-    setDefaultValue("otel.exporter.jaeger.service.name", "OtelInstrumentedLambda");
-    setDefaultValue("otel.java.disabled.resource_providers", DISABLED_RESOURCE_PROVIDERS);
-  }
+  @Override
+  public Map<String, String> getProperties() {
+    Map<String, String> config = new HashMap<>();
 
-  static void setDefaultValue(String name, String value) {
-    if (!isConfigured(name)) {
-      log.info("Setting default value. name={}, value={}", name, value);
-      System.setProperty(name, value);
-    }
-  }
+    // by default no metrics are exported
+    config.put("otel.metrics.exporter", "none");
 
-  private static boolean isConfigured(String name) {
-    return (System.getProperty(name) != null || System.getenv(toEnvVarName(name)) != null);
-  }
+    // jaeger-thrift defaults
+    config.put("otel.trace.exporter", "jaeger-thrift-splunk");
+    config.put(OTEL_EXPORTER_JAEGER_ENDPOINT, "http://localhost:9080/v1/trace");
+    config.put("otel.exporter.jaeger.service.name", "OtelInstrumentedLambda");
 
-  private static final Pattern ENV_REPLACEMENT = Pattern.compile("[^a-zA-Z0-9_]");
+    // B3 propagation
+    config.put("otel.propagators", "b3");
 
-  private static String toEnvVarName(String propertyName) {
-    return ENV_REPLACEMENT.matcher(propertyName.toUpperCase()).replaceAll("_");
+    // sample ALL
+    config.put("otel.trace.sampler", "always_on");
+
+    // disable non-lambda resource providers
+    config.put("otel.java.disabled.resource_providers", DISABLED_RESOURCE_PROVIDERS);
+
+    return config;
   }
 }

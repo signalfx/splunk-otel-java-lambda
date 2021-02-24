@@ -50,7 +50,7 @@ public final class LambdaConfiguration {
   private static void configureOpenTelemetry() {
 
     OpenTelemetrySdk.builder()
-        .setPropagators(ContextPropagators.create(B3Propagator.getInstance()))
+        .setPropagators(ContextPropagators.create(B3Propagator.injectingSingleHeader()))
         .setTracerProvider(
             SdkTracerProvider.builder()
                 .addSpanProcessor(SimpleSpanProcessor.create(new LoggingSpanExporter()))

@@ -16,9 +16,11 @@
 
 package com.splunk.support.lambda;
 
+import com.splunk.support.lambda.configuration.SplunkConfiguration;
+
 public class TracingRequestApiGatewayWrapper
     extends io.opentelemetry.instrumentation.awslambda.v1_0.TracingRequestApiGatewayWrapper {
   static {
-    Configurator.configure();
+    SplunkConfiguration.configure();
   }
 }

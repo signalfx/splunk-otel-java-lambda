@@ -19,6 +19,7 @@ package com.splunk.support.lambda;
 import io.opentelemetry.api.GlobalOpenTelemetry;
 import io.opentelemetry.context.Context;
 import io.opentelemetry.context.propagation.TextMapPropagator;
+import io.opentelemetry.context.propagation.TextMapSetter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,7 +27,7 @@ public final class PropagationHelper {
 
   private PropagationHelper() {}
 
-  private static final TextMapPropagator.Setter<Map<String, String>> SETTER = new MapSetter();
+  private static final TextMapSetter<Map<String, String>> SETTER = new MapSetter();
 
   public static Map<String, String> createHeaders() {
 
@@ -36,7 +37,7 @@ public final class PropagationHelper {
     return result;
   }
 
-  private static class MapSetter implements TextMapPropagator.Setter<Map<String, String>> {
+  private static class MapSetter implements TextMapSetter<Map<String, String>> {
 
     @Override
     public void set(Map<String, String> map, String key, String value) {

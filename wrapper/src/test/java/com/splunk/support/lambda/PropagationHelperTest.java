@@ -18,11 +18,12 @@ package com.splunk.support.lambda;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import io.opentelemetry.api.GlobalOpenTelemetry;
 import io.opentelemetry.context.Context;
-import io.opentelemetry.context.propagation.TextMapPropagator;
+import io.opentelemetry.context.propagation.ContextPropagators;
+import io.opentelemetry.context.propagation.TextMapGetter;
 import io.opentelemetry.extension.trace.propagation.B3Propagator;
 import io.opentelemetry.sdk.OpenTelemetrySdk;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
@@ -35,11 +36,11 @@ public class PropagationHelperTest {
     inbound.put("X-B3-SpanId", spanId);
     inbound.put("X-B3-Sampled", "1");
     Context extracted =
-        B3Propagator.getInstance()
+        B3Propagator.injectingSingleHeader()
             .extract(
                 Context.current(),
                 inbound,
-                new TextMapPropagator.Getter<Map<String, String>>() {
+                new TextMapGetter<Map<String, String>>() {
                   @Override
                   public Iterable<String> keys(Map<String, String> stringStringMap) {
                     return stringStringMap.keySet();
@@ -57,9 +58,9 @@ public class PropagationHelperTest {
   public void shouldCreateB3OutboundHeaders() {
 
     // given
+    GlobalOpenTelemetry.resetForTest();
     OpenTelemetrySdk.builder()
-        .setPropagators(
-            PropagatorsInitializer.configurePropagators(Collections.singletonList("b3multi")))
+        .setPropagators(ContextPropagators.create(B3Propagator.injectingMultiHeaders()))
         .buildAndRegisterGlobal();
     initContextWith("4fd0b6131f19f39af59518d127b0cafe", "0000000000000123");
 
