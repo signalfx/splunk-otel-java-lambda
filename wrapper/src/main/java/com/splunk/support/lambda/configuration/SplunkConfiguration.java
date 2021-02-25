@@ -18,7 +18,6 @@ package com.splunk.support.lambda.configuration;
 
 import static com.splunk.support.lambda.configuration.JaegerThriftSpanExporterFactory.OTEL_EXPORTER_JAEGER_ENDPOINT;
 
-import io.opentelemetry.sdk.autoconfigure.OpenTelemetrySdkAutoConfiguration;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Handler;
 import java.util.logging.Level;
@@ -46,7 +45,6 @@ public class SplunkConfiguration {
   public static void configure() {
     setDefaults();
     configureOtelLogging();
-    OpenTelemetrySdkAutoConfiguration.initialize();
   }
 
   private static void configureOtelLogging() {

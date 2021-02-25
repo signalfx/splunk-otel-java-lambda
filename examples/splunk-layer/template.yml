@@ -22,7 +22,7 @@ Resources:
       Environment:
         Variables:
           OTEL_INSTRUMENTATION_AWS_LAMBDA_HANDLER: com.splunk.support.lambda.examples.RequestFunction::handleRequest
-          OTEL_INSTRUMENTATION_AWS_LAMBDA_FLUSH_TIMEOUT: 30
+          OTEL_INSTRUMENTATION_AWS_LAMBDA_FLUSH_TIMEOUT: 30000
           OTEL_TRACES_EXPORTER: logging
           OTEL_LAMBDA_LOG_LEVEL: DEBUG
           OTEL_LIB_LOG_LEVEL: FINEST

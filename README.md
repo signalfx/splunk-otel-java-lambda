@@ -99,13 +99,12 @@ template. For more information, see the [example](./examples/splunk-wrapper/READ
    variables in your Lambda function code:
    ```
    OTEL_EXPORTER_JAEGER_ENDPOINT="http://yourEndpoint:9080/v1/trace"
-   OTEL_RESOURCE_ATTRIBUTES="service.name=myServiceName
    SIGNALFX_AUTH_TOKEN="orgAccessToken"
    ```
    Also, you can set span flush wait timeout, that is max time the function will wait for the spans to be ingested by the Splunk APM. Default is 1 second. 
-   Timeout is controlled with a following property (value in seconds):
+   Timeout is controlled with a following property (value in milliseconds):
    ```
-   OTEL_INSTRUMENTATION_AWS_LAMBDA_FLUSH_TIMEOUT: 30
+   OTEL_INSTRUMENTATION_AWS_LAMBDA_FLUSH_TIMEOUT: 30000
    ```
    
    If you want to use a different exporter, set the `OTEL_TRACES_EXPORTER`
@@ -117,7 +116,11 @@ template. For more information, see the [example](./examples/splunk-wrapper/READ
    ```
    OTEL_RESOURCE_ATTRIBUTES="environment=yourEnvironment"
    ```   
-8. Save your settings and call the Lambda function.
+8. Set the service name in Splunk APM with the `OTEL_RESOURCE_ATTRIBUTES` environment variable:
+    ```
+    OTEL_RESOURCE_ATTRIBUTES="service.name=myServiceName
+    ```
+9. Save your settings and call the Lambda function.
 
 ## Deploy the wrapper with a Lambda layer
 
