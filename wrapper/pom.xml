@@ -132,11 +132,6 @@
             <version>${otel.version}</version>
         </dependency>
         <dependency>
-            <groupId>io.opentelemetry.javaagent</groupId>
-            <artifactId>opentelemetry-javaagent-spi</artifactId>
-            <version>${otel.instrumentation.version}</version>
-        </dependency>
-        <dependency>
             <groupId>io.opentelemetry</groupId>
             <artifactId>opentelemetry-sdk-extension-autoconfigure</artifactId>
             <version>${otel.version.alpha}</version>

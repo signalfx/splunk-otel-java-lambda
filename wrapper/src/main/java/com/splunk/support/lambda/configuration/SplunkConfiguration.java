@@ -18,19 +18,16 @@ package com.splunk.support.lambda.configuration;
 
 import static com.splunk.support.lambda.configuration.JaegerThriftSpanExporterFactory.OTEL_EXPORTER_JAEGER_ENDPOINT;
 
-import com.google.auto.service.AutoService;
-import io.opentelemetry.javaagent.spi.config.PropertySource;
-import java.util.HashMap;
-import java.util.Map;
+import io.opentelemetry.sdk.autoconfigure.OpenTelemetrySdkAutoConfiguration;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.SimpleFormatter;
+import java.util.regex.Pattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@AutoService(PropertySource.class)
-public class SplunkConfiguration implements PropertySource {
+public class SplunkConfiguration {
 
   private static final Logger log = LoggerFactory.getLogger(SplunkConfiguration.class);
 
@@ -47,7 +44,9 @@ public class SplunkConfiguration implements PropertySource {
           "io.opentelemetry.sdk.extension.aws.resource.EksResource");
 
   public static void configure() {
+    setDefaults();
     configureOtelLogging();
+    OpenTelemetrySdkAutoConfiguration.initialize();
   }
 
   private static void configureOtelLogging() {
@@ -76,27 +75,39 @@ public class SplunkConfiguration implements PropertySource {
     return Level.WARNING;
   }
 
-  @Override
-  public Map<String, String> getProperties() {
-    Map<String, String> config = new HashMap<>();
-
+  private static void setDefaults() {
     // by default no metrics are exported
-    config.put("otel.metrics.exporter", "none");
+    setDefaultValue("otel.metrics.exporter", "none");
 
     // jaeger-thrift defaults
-    config.put("otel.trace.exporter", "jaeger-thrift-splunk");
-    config.put(OTEL_EXPORTER_JAEGER_ENDPOINT, "http://localhost:9080/v1/trace");
-    config.put("otel.exporter.jaeger.service.name", "OtelInstrumentedLambda");
+    setDefaultValue("otel.traces.exporter", "jaeger-thrift-splunk");
+    setDefaultValue(OTEL_EXPORTER_JAEGER_ENDPOINT, "http://localhost:9080/v1/trace");
+    setDefaultValue("otel.resource.attributes", "service.name=OtelInstrumentedLambda");
 
     // B3 propagation
-    config.put("otel.propagators", "b3");
+    setDefaultValue("otel.propagators", "b3");
 
     // sample ALL
-    config.put("otel.trace.sampler", "always_on");
+    setDefaultValue("otel.traces.sampler", "always_on");
 
     // disable non-lambda resource providers
-    config.put("otel.java.disabled.resource_providers", DISABLED_RESOURCE_PROVIDERS);
+    setDefaultValue("otel.java.disabled.resource-providers", DISABLED_RESOURCE_PROVIDERS);
+  }
 
-    return config;
+  private static void setDefaultValue(String name, String value) {
+    if (!isConfigured(name)) {
+      log.info("Setting default value. name={}, value={}", name, value);
+      System.setProperty(name, value);
+    }
+  }
+
+  private static boolean isConfigured(String name) {
+    return (System.getProperty(name) != null || System.getenv(toEnvVarName(name)) != null);
+  }
+
+  private static final Pattern ENV_REPLACEMENT = Pattern.compile("[^a-zA-Z0-9_]");
+
+  private static String toEnvVarName(String propertyName) {
+    return ENV_REPLACEMENT.matcher(propertyName.toUpperCase()).replaceAll("_");
   }
 }

@@ -99,7 +99,7 @@ template. For more information, see the [example](./examples/splunk-wrapper/READ
    variables in your Lambda function code:
    ```
    OTEL_EXPORTER_JAEGER_ENDPOINT="http://yourEndpoint:9080/v1/trace"
-   OTEL_EXPORTER_JAEGER_SERVICE_NAME="serviceName"
+   OTEL_RESOURCE_ATTRIBUTES="service.name=myServiceName
    SIGNALFX_AUTH_TOKEN="orgAccessToken"
    ```
    Also, you can set span flush wait timeout, that is max time the function will wait for the spans to be ingested by the Splunk APM. Default is 1 second. 
