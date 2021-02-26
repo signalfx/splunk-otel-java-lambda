@@ -18,7 +18,6 @@ package com.splunk.support.lambda.configuration;
 
 import com.google.auto.service.AutoService;
 import io.opentelemetry.exporter.logging.LoggingSpanExporter;
-import io.opentelemetry.instrumentation.api.config.Config;
 import io.opentelemetry.sdk.autoconfigure.spi.SdkTracerProviderConfigurer;
 import io.opentelemetry.sdk.trace.SdkTracerProviderBuilder;
 import io.opentelemetry.sdk.trace.export.SimpleSpanProcessor;
@@ -45,6 +44,6 @@ public class TracerProviderConfigurer implements SdkTracerProviderConfigurer {
   }
 
   private static boolean loggingExporterIsNotAlreadyConfigured() {
-    return !Config.get().getProperty("otel.traces.exporter", "").equalsIgnoreCase("logging");
+    return !"logging".equalsIgnoreCase(System.getenv("OTEL_TRACES_EXPORTER"));
   }
 }
