@@ -8,8 +8,8 @@ description = "Splunk OTEL Java Lambda Wrapper Examples"
 
 ext {
     versions = [
-            opentelemetry: '0.14.1',
-            instrumentation: '0.14.0',
+            opentelemetry: '0.17.1',
+            instrumentation: '0.17.0-alpha',
             wrapper: '0.0.4-SNAPSHOT'
     ]
 }

@@ -7,7 +7,7 @@ that enables you to export spans from an AWS Lambda function with Java to
 Splunk APM without any code changes to your Lambda functions.
 
 The current release uses `OpenTelemetry AWS Lambda Instrumentation` version
-`0.12.0`.
+`0.17.0` and `OpenTelemetry Java SDK` version `0.17.1`.
 
 This Splunk distribution comes with the following defaults:
 
@@ -64,10 +64,13 @@ template. For more information, see the [example](./examples/splunk-wrapper/READ
    </dependency>
    ```
 2. From the AWS console, upload the .zip file to your Lambda function code.
+
    For more information, see [Deploy Java Lambda functions with .zip file archives](https://docs.aws.amazon.com/lambda/latest/dg/java-package.html)
    on the AWS website.
-3. Set a wrapper class as the handler for your Lambda function. These wrappers
-   are available:
+3. Set a wrapper class as the handler for your Lambda function. 
+
+    These wrappers are available:
+    
    | Wrapper class | Description |
    | ------------- | ----------- |
    | `com.splunk.support.lambda.TracingRequestWrapper` | Wrap a regular handler. |
@@ -83,35 +86,41 @@ template. For more information, see the [example](./examples/splunk-wrapper/READ
    For more information about setting environment variables in the AWS console,
    see [Using AWS Lambda environment variables](https://docs.aws.amazon.com/lambda/latest/dg/configuration-envvars.html)
    on the AWS website.
-5. By default, the Splunk Lambda wrapper uses B3 context propagation. If you
-   want to change this, set the `OTEL_PROPAGATORS` environment variable in your
+5. By default, the Splunk Lambda wrapper uses B3 context propagation. 
+    
+    If you want to change this, set the `OTEL_PROPAGATORS` environment variable in your
    Lambda function code. For more information about available context
-   propagators, see the [Propagator settings](https://github.com/open-telemetry/opentelemetry-java-instrumentation#propagator)
-   for the OpenTelemetry Java Instrumentation.
-6. By default, the Splunk Lambda wrapper uses a jaeger-thrift exporter to send
-   traces to Splunk APM. If you want to use this exporter, set these environment
+   propagators, see the [Propagator settings](https://github.com/open-telemetry/opentelemetry-java/tree/v0.17.0/sdk-extensions/autoconfigure#customizing-the-opentelemetry-sdk)
+   for the OpenTelemetry Java.
+6. By default, the Splunk Lambda wrapper uses a `jaeger-thrift-splunk` exporter to send
+   traces to Splunk APM. 
+   
+   If you want to use this exporter, set these environment
    variables in your Lambda function code:
    ```
    OTEL_EXPORTER_JAEGER_ENDPOINT="http://yourEndpoint:9080/v1/trace"
-   OTEL_EXPORTER_JAEGER_SERVICE_NAME="serviceName"
    SIGNALFX_AUTH_TOKEN="orgAccessToken"
    ```
    Also, you can set span flush wait timeout, that is max time the function will wait for the spans to be ingested by the Splunk APM. Default is 1 second. 
-   Timeout is controlled with a following property (value in seconds):
+   Timeout is controlled with a following property (value in milliseconds):
    ```
-   OTEL_INSTRUMENTATION_AWS_LAMBDA_FLUSH_TIMEOUT: 30
+   OTEL_INSTRUMENTATION_AWS_LAMBDA_FLUSH_TIMEOUT: 30000
    ```
    
-   If you want to use a different exporter, set the `OTEL_EXPORTERS`
+   If you want to use a different exporter, set the `OTEL_TRACES_EXPORTER`
    environment variable. Other exporters have their own configuration settings.
-   For more information, see the [OpenTelemetry Instrumentation for Java](https://github.com/open-telemetry/opentelemetry-java-instrumentation)
+   For more information, see the [OpenTelemetry Java SDK](https://github.com/open-telemetry/opentelemetry-java/tree/v0.17.0/sdk-extensions/autoconfigure#customizing-the-opentelemetry-sdk)
    on GitHub.
 7. Set the environment in Splunk APM for the service with the
    `OTEL_RESOURCE_ATTRIBUTES` environment variable:
    ```
    OTEL_RESOURCE_ATTRIBUTES="environment=yourEnvironment"
    ```   
-8. Save your settings and call the Lambda function.
+8. Set the service name in Splunk APM with the `OTEL_RESOURCE_ATTRIBUTES` environment variable:
+    ```
+    OTEL_RESOURCE_ATTRIBUTES="service.name=myServiceName
+    ```
+9. Save your settings and call the Lambda function.
 
 ## Deploy the wrapper with a Lambda layer
 
