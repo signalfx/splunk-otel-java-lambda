@@ -10,6 +10,8 @@ dependencies {
 
           "io.opentelemetry.instrumentation:opentelemetry-aws-lambda-1.0:${versions.instrumentation}",
           "io.opentelemetry:opentelemetry-sdk:${versions.opentelemetry}",
+          "io.opentelemetry:opentelemetry-sdk-extension-autoconfigure:${versions.opentelemetryalpha}",
+          "com.google.auto.service:auto-service:1.0-rc7", // for SDK autoconf
           "io.opentelemetry:opentelemetry-extension-trace-propagators:${versions.opentelemetry}",
           "io.opentelemetry:opentelemetry-exporter-logging:${versions.opentelemetry}")
 }
