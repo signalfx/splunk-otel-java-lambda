@@ -16,12 +16,6 @@
 
 package com.splunk.support.lambda.examples;
 
-import io.opentelemetry.context.propagation.ContextPropagators;
-import io.opentelemetry.exporter.logging.LoggingSpanExporter;
-import io.opentelemetry.extension.trace.propagation.B3Propagator;
-import io.opentelemetry.sdk.OpenTelemetrySdk;
-import io.opentelemetry.sdk.trace.SdkTracerProvider;
-import io.opentelemetry.sdk.trace.export.SimpleSpanProcessor;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -49,12 +43,11 @@ public final class LambdaConfiguration {
 
   private static void configureOpenTelemetry() {
 
-    OpenTelemetrySdk.builder()
-        .setPropagators(ContextPropagators.create(B3Propagator.injectingSingleHeader()))
-        .setTracerProvider(
-            SdkTracerProvider.builder()
-                .addSpanProcessor(SimpleSpanProcessor.create(new LoggingSpanExporter()))
-                .build())
-        .buildAndRegisterGlobal();
+    // by default no metrics are exported
+    System.setProperty("otel.metrics.exporter", "none");
+
+    // jaeger-thrift defaults
+    System.setProperty("otel.traces.exporter", "logging");
+    System.setProperty("otel.resource.attributes", "service.name=OtelInstrumentedLambda");
   }
 }
