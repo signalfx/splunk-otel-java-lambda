@@ -29,7 +29,7 @@ deploy the Lambda wrapper with a layer, Splunk also hosts a layer in AWS.
 Outbound context propagation for lambdas instrumented with this wrapper can be
 easily implemented. Please have a look [here](outbound-context-propagation.md).
 
-> :construction: This project is currently in **BETA**.
+> :construction: This project is currently in **BETA**. It is **officially supported** by Splunk. However, breaking changes **MAY** be introduced.
 
 ## Deploy the wrapper directly with a Lambda function handler
 
