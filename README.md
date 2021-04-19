@@ -1,3 +1,41 @@
+---
+
+<p align="center">
+  <strong>
+    <a href="#getting-started">Getting Started</a>
+    &nbsp;&nbsp;&bull;&nbsp;&nbsp;
+    <a href="CONTRIBUTING.md">Getting Involved</a>
+    &nbsp;&nbsp;&bull;&nbsp;&nbsp;
+    <a href="#license">License</a>
+    &nbsp;&nbsp;&bull;&nbsp;&nbsp;
+    <a href="SECURITY.md">Security</a>
+  </strong>
+</p>
+
+<p align="center">
+  <a href="https://github.com/signalfx/splunk-otel-java-lambda/actions?query=workflow%3A%22PR+build%22">
+    <img alt="Build Status" src="https://img.shields.io/github/workflow/status/signalfx/splunk-otel-java-lambda/PR%20build?style=for-the-badge">
+  </a>
+  <a href="https://github.com/signalfx/splunk-otel-java-lambda/releases">
+    <img alt="GitHub release (latest by date)" src="https://img.shields.io/github/v/release/signalfx/splunk-otel-java-lambda?include_prereleases&style=for-the-badge">
+  </a>
+</p>
+
+
+<p align="center">
+  <strong>
+    <a href="TROUBLESHOOTING.md">Troubleshooting</a>
+    &nbsp;&nbsp;&bull;&nbsp;&nbsp;
+    <a href="RELEASING.md">Releasing</a>
+    &nbsp;&nbsp;&bull;&nbsp;&nbsp;
+    <a href="#logging">Logging</a>
+    &nbsp;&nbsp;&bull;&nbsp;&nbsp;
+    <a href="#aws-span-tags-the-wrapper-adds-to-trace-data">AWS span tags</a>
+  </strong>
+</p>
+
+---
+
 # Splunk OpenTelemetry Java Lambda Wrapper
 
 The Splunk OpenTelemetry Java Lambda Wrapper is a modified version of the
@@ -7,7 +45,7 @@ that enables you to export spans from an AWS Lambda function with Java to
 Splunk APM without any code changes to your Lambda functions.
 
 The current release uses `OpenTelemetry AWS Lambda Instrumentation` version
-`0.17.0` and `OpenTelemetry Java SDK` version `0.17.1`.
+`1.1.0` and `OpenTelemetry Java SDK` version `1.1.0`.
 
 This Splunk distribution comes with the following defaults:
 
@@ -29,9 +67,9 @@ deploy the Lambda wrapper with a layer, Splunk also hosts a layer in AWS.
 Outbound context propagation for lambdas instrumented with this wrapper can be
 easily implemented. Please have a look [here](outbound-context-propagation.md).
 
-> :construction: This project is currently in **BETA**. It is **officially supported** by Splunk. However, breaking changes **MAY** be introduced.
+## Getting Started
 
-## Deploy the wrapper directly with a Lambda function handler
+### Deploy the wrapper directly with a Lambda function handler
 
 A Splunk Lambda wrapper wraps around an existing AWS Lambda Java function
 handler. This approach doesn't require any code changes to your Lambda function.
@@ -90,7 +128,7 @@ template. For more information, see the [example](./examples/splunk-wrapper/READ
     
     If you want to change this, set the `OTEL_PROPAGATORS` environment variable in your
    Lambda function code. For more information about available context
-   propagators, see the [Propagator settings](https://github.com/open-telemetry/opentelemetry-java/tree/v0.17.0/sdk-extensions/autoconfigure#customizing-the-opentelemetry-sdk)
+   propagators, see the [Propagator settings](https://github.com/open-telemetry/opentelemetry-java/tree/v1.1.0/sdk-extensions/autoconfigure#customizing-the-opentelemetry-sdk)
    for the OpenTelemetry Java.
 6. By default, the Splunk Lambda wrapper uses a `jaeger-thrift-splunk` exporter to send
    traces to Splunk APM. 
@@ -109,7 +147,7 @@ template. For more information, see the [example](./examples/splunk-wrapper/READ
    
    If you want to use a different exporter, set the `OTEL_TRACES_EXPORTER`
    environment variable. Other exporters have their own configuration settings.
-   For more information, see the [OpenTelemetry Java SDK](https://github.com/open-telemetry/opentelemetry-java/tree/v0.17.0/sdk-extensions/autoconfigure#customizing-the-opentelemetry-sdk)
+   For more information, see the [OpenTelemetry Java SDK](https://github.com/open-telemetry/opentelemetry-java/tree/v1.1.0/sdk-extensions/autoconfigure#customizing-the-opentelemetry-sdk)
    on GitHub.
 7. Set the environment in Splunk APM for the service with the
    `OTEL_RESOURCE_ATTRIBUTES` environment variable:
@@ -122,7 +160,7 @@ template. For more information, see the [example](./examples/splunk-wrapper/READ
     ```
 9. Save your settings and call the Lambda function.
 
-## Deploy the wrapper with a Lambda layer
+### Deploy the wrapper with a Lambda layer
 
 Add a layer that includes the Splunk Lambda wrapper to your Lambda function.
 A layer is code and other content that you can run without including it in
@@ -177,11 +215,7 @@ These environment variables control logging:
 | `OTEL_LIB_LOG_LEVEL` | Controls logging for the OpenTelemetry library. By default, it's set to `WARNING` and uses `java.util.logging` values. |
 | `OTEL_LAMBDA_LOG_LEVEL` | Controls logging of the Splunk Lambda wrapper. By default, it's set to `WARN` and uses `log4j2` values.
 
-## Releasing note
-
-Instructions regarding the release process can be found [here](RELEASING.md)
-
-## License and versioning
+## License
 
 The Splunk OpenTelemetry Java Lambda Wrapper uses the
 [OpenTelemetry Instrumentation for Java](https://github.com/open-telemetry/opentelemetry-java-instrumentation), [OpenTelemetry Java SDK and extensions](https://github.com/open-telemetry/opentelemetry-java), 

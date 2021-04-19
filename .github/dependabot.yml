@@ -1,0 +1,14 @@
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "gradle"
+    directory: "/examples"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "Maven"
+      directory: "/wrapper"
+      schedule:
+        interval: "daily"
