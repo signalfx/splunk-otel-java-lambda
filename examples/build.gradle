@@ -11,7 +11,7 @@ ext {
             opentelemetry: '1.1.0',
             opentelemetryalpha: '1.1.0-alpha',
             instrumentation: '1.1.0-alpha',
-            wrapper: '1.0.0'
+            wrapper: '1.1.0-SNAPSHOT'
     ]
 }
 
