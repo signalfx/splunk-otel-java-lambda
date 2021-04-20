@@ -89,7 +89,7 @@ template. For more information, see the [example](./examples/splunk-wrapper/READ
    Gradle:
    ```
    dependencies {
-     implementation("com.signalfx.public:otel-java-lambda-wrapper:0.0.4")
+     implementation("com.signalfx.public:otel-java-lambda-wrapper:1.0.0")
    }
    ```
 
@@ -98,7 +98,7 @@ template. For more information, see the [example](./examples/splunk-wrapper/READ
    <dependency>
      <groupId>com.signalfx.public</groupId>
      <artifactId>otel-java-lambda-wrapper</artifactId>
-     <version>0.0.4</version>
+     <version>1.0.0</version>
    </dependency>
    ```
 2. From the AWS console, upload the .zip file to your Lambda function code.
