@@ -35,12 +35,12 @@ public class SplunkConfiguration {
   private static final String DISABLED_RESOURCE_PROVIDERS =
       String.join(
           ",",
-          "io.opentelemetry.sdk.extension.resources.OsResource",
-          "io.opentelemetry.sdk.extension.resources.ProcessResource",
-          "io.opentelemetry.sdk.extension.aws.resource.BeanstalkResource",
-          "io.opentelemetry.sdk.extension.aws.resource.Ec2Resource",
-          "io.opentelemetry.sdk.extension.aws.resource.EcsResource",
-          "io.opentelemetry.sdk.extension.aws.resource.EksResource");
+          "io.opentelemetry.sdk.extension.resources.OsResourceProvider",
+          "io.opentelemetry.sdk.extension.resources.ProcessResourceProvider",
+          "io.opentelemetry.sdk.extension.aws.resource.BeanstalkResourceProvider",
+          "io.opentelemetry.sdk.extension.aws.resource.Ec2ResourceProvider",
+          "io.opentelemetry.sdk.extension.aws.resource.EcsResourceProvider",
+          "io.opentelemetry.sdk.extension.aws.resource.EksResourceProvider");
 
   public static void configure() {
     setDefaults();
@@ -89,7 +89,7 @@ public class SplunkConfiguration {
     setDefaultValue("otel.traces.sampler", "always_on");
 
     // disable non-lambda resource providers
-    setDefaultValue("otel.java.disabled.resource-providers", DISABLED_RESOURCE_PROVIDERS);
+    setDefaultValue("otel.java.disabled.resource.providers", DISABLED_RESOURCE_PROVIDERS);
   }
 
   private static void setDefaultValue(String name, String value) {

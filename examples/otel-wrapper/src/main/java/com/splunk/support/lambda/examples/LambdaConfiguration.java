@@ -24,6 +24,16 @@ import java.util.logging.SimpleFormatter;
 /** Configures: - B3 inbound context propagation - logging exporter - debug / finest logging */
 public final class LambdaConfiguration {
 
+  private static final String DISABLED_RESOURCE_PROVIDERS =
+      String.join(
+          ",",
+          "io.opentelemetry.sdk.extension.resources.OsResourceProvider",
+          "io.opentelemetry.sdk.extension.resources.ProcessResourceProvider",
+          "io.opentelemetry.sdk.extension.aws.resource.BeanstalkResourceProvider",
+          "io.opentelemetry.sdk.extension.aws.resource.Ec2ResourceProvider",
+          "io.opentelemetry.sdk.extension.aws.resource.EcsResourceProvider",
+          "io.opentelemetry.sdk.extension.aws.resource.EksResourceProvider");
+
   public static void configure() {
 
     configureOpenTelemetry();
@@ -49,5 +59,6 @@ public final class LambdaConfiguration {
     // jaeger-thrift defaults
     System.setProperty("otel.traces.exporter", "logging");
     System.setProperty("otel.resource.attributes", "service.name=OtelInstrumentedLambda");
+    System.setProperty("otel.java.disabled.resource.providers", DISABLED_RESOURCE_PROVIDERS);
   }
 }
