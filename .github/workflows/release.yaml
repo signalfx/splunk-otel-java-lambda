@@ -1,7 +1,25 @@
+# Release workflow
+# - triggered by  RC tag creation
+# - awaits approval
+# - calculate next release and development versions
+# - pre-release
+# -- update POM / examples / docs version to requested release
+# -- commit
+# -- tag release (v{VERSION})
+# - build package
+# - GitHub release
+# - M2 release
+# - post-release
+# -- update POM / examples to next development version
+# -- update release properties
+# -- make sure release settings are not modified
+# -- commit
+# - push all changes
+
 on:
   push:
     tags:
-      - 'v*'
+      - 'rc*'
 
 name: GitHub and Maven wrapper release
 
@@ -20,13 +38,30 @@ jobs:
         with:
           java-version: 11
 
-      - name: Build wrapper with Maven
-        id: build_wrapper
-        run: mvn -B clean package --file ./wrapper/pom.xml
-
       - name: Get release version
         id: get_version
-        run: echo ::set-output name=VERSION::${GITHUB_REF:11}
+        run: echo ::set-output name=VERSION::${GITHUB_REF:12}
+
+      - name: Create new devlopment version
+        id: bump_version
+        uses: christian-draeger/increment-semantic-version@1.0.2
+        with:
+          current-version: ${{ steps.get_version.outputs.VERSION }}
+          version-fragment: 'feature'
+
+      - name: Configure git
+        id: configure_git
+        run: |
+          git config --global user.name 'Lambda wrapper CI'
+          git config --global user.email 'lambda-wrapper-ci@users.noreply.github.com'
+
+      - name: Prepare release
+        id: prepare_release
+        run: ./pre-release.sh ${{ steps.get_version.outputs.VERSION }}
+
+      - name: Build wrapper binaries
+        id: build_wrapper
+        run: mvn -B clean package --file ./wrapper/pom.xml
 
       - name: Copy release artifact
         id: copy_release_artifact
@@ -41,8 +76,8 @@ jobs:
           name: Release ${{ steps.get_version.outputs.VERSION }}
           files: otel-java-lambda-wrapper.jar
 
-      - name: Prepare release settings
-        id: prepare_release
+      - name: Prepare M2 release settings
+        id: prepare_m2_release
         run: |
           sed -i 's/OSSRH_USER/${{ secrets.OSSRH_USER }}/g' ./wrapper/release-settings.xml
           sed -i 's/OSSRH_PASSWORD/${{ secrets.OSSRH_PASSWORD }}/g' ./wrapper/release-settings.xml
@@ -56,3 +91,13 @@ jobs:
       - name: Publish to OSS M2 repo
         id: create_m2_release
         run: mvn -B -DperformRelease=true -Dgpg.passphrase=${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }} deploy --file ./wrapper/pom.xml -s ./wrapper/release-settings.xml
+
+      - name: Post release
+        id: post_release
+        run: ./post-release.sh ${{ steps.get_version.outputs.VERSION }} ${{ steps.bump_version.outputs.next-version }}-SNAPSHOT
+
+      - name: Push changes
+        id: push_changes
+        run: |
+          git push
+          git push origin --tags
