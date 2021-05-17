@@ -51,7 +51,7 @@ This Splunk distribution comes with the following defaults:
 
 - W3C specified Trace Context and Baggage propagation (`tracecontext,baggage`) context propagation
 - OpenTelemetry Protocol (`otlp`) traces exporter
-- no metrics exporter
+- No metrics exporter
 
 This project contains the custom wrapper code in the [wrapper](https://github.com/signalfx/splunk-otel-java-lambda-wrapper/tree/main/wrapper)
 directory and examples in the [examples](https://github.com/signalfx/splunk-otel-java-lambda-wrapper/tree/main/examples) directory.
