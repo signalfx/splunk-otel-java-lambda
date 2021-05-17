@@ -131,7 +131,7 @@ template. For more information, see the [example](./examples/splunk-wrapper/READ
    Lambda function code. For more information about available context
    propagators, see the [Propagator settings](https://github.com/open-telemetry/opentelemetry-java/tree/v1.1.0/sdk-extensions/autoconfigure#customizing-the-opentelemetry-sdk)
    for the OpenTelemetry Java.
-6. By default, the Splunk Lambda wrapper uses a `otlp` exporter to send traces to Splunk APM. 
+6. By default, the Splunk Lambda wrapper uses an OpenTelemetry Protocol (`otlp`) exporter to send traces to Splunk APM. 
    
    If you want to use this exporter, set these environment
    variables in your Lambda function code:
