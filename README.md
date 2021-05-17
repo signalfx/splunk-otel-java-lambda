@@ -49,8 +49,8 @@ The current release uses `OpenTelemetry AWS Lambda Instrumentation` version
 
 This Splunk distribution comes with the following defaults:
 
-- `tracecontext,baggage` context propagation
-- `OTLP` traces exporter
+- W3C specified Trace Context and Baggage propagation (`tracecontext,baggage`) context propagation
+- OpenTelemetry Protocol (`otlp`) traces exporter
 - no metrics exporter
 
 This project contains the custom wrapper code in the [wrapper](https://github.com/signalfx/splunk-otel-java-lambda-wrapper/tree/main/wrapper)
@@ -125,7 +125,7 @@ template. For more information, see the [example](./examples/splunk-wrapper/READ
    For more information about setting environment variables in the AWS console,
    see [Using AWS Lambda environment variables](https://docs.aws.amazon.com/lambda/latest/dg/configuration-envvars.html)
    on the AWS website.
-5. By default, the Splunk Lambda wrapper uses `tracecontext,baggage` context propagation. 
+5. By default, the Splunk Lambda wrapper uses W3C specified Trace Context and Baggage (`tracecontext,baggage`) context propagation. 
     
    If you want to change this, set the `OTEL_PROPAGATORS` environment variable in your
    Lambda function code. For more information about available context
