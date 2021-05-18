@@ -49,8 +49,9 @@ The current release uses `OpenTelemetry AWS Lambda Instrumentation` version
 
 This Splunk distribution comes with the following defaults:
 
-- [B3 context propagation](https://github.com/openzipkin/b3-propagation).
-- [Jaeger-Thrift exporter](https://www.jaegertracing.io).
+- W3C specified Trace Context and Baggage propagation (`tracecontext,baggage`) context propagation
+- OpenTelemetry Protocol (`otlp`) traces exporter
+- No metrics exporter
 
 This project contains the custom wrapper code in the [wrapper](https://github.com/signalfx/splunk-otel-java-lambda-wrapper/tree/main/wrapper)
 directory and examples in the [examples](https://github.com/signalfx/splunk-otel-java-lambda-wrapper/tree/main/examples) directory.
@@ -124,20 +125,19 @@ template. For more information, see the [example](./examples/splunk-wrapper/READ
    For more information about setting environment variables in the AWS console,
    see [Using AWS Lambda environment variables](https://docs.aws.amazon.com/lambda/latest/dg/configuration-envvars.html)
    on the AWS website.
-5. By default, the Splunk Lambda wrapper uses B3 context propagation. 
+5. By default, the Splunk Lambda wrapper uses W3C specified Trace Context and Baggage (`tracecontext,baggage`) context propagation. 
     
-    If you want to change this, set the `OTEL_PROPAGATORS` environment variable in your
+   If you want to change this, set the `OTEL_PROPAGATORS` environment variable in your
    Lambda function code. For more information about available context
    propagators, see the [Propagator settings](https://github.com/open-telemetry/opentelemetry-java/tree/v1.1.0/sdk-extensions/autoconfigure#customizing-the-opentelemetry-sdk)
    for the OpenTelemetry Java.
-6. By default, the Splunk Lambda wrapper uses a `jaeger-thrift-splunk` exporter to send
-   traces to Splunk APM. 
+6. By default, the Splunk Lambda wrapper uses the OpenTelemetry Protocol (`otlp`) exporter to send traces to Splunk APM. 
    
    If you want to use this exporter, set these environment
    variables in your Lambda function code:
    ```
-   OTEL_EXPORTER_JAEGER_ENDPOINT="http://yourEndpoint:9080/v1/trace"
-   SIGNALFX_AUTH_TOKEN="orgAccessToken"
+   OTEL_EXPORTER_OTLP_ENDPOINT="http://yourEndpoint:4317"
+   SPLUNK_AUTH_TOKEN="orgAccessToken"
    ```
    Also, you can set span flush wait timeout, that is max time the function will wait for the spans to be ingested by the Splunk APM. Default is 1 second. 
    Timeout is controlled with a following property (value in milliseconds):
@@ -147,8 +147,15 @@ template. For more information, see the [example](./examples/splunk-wrapper/READ
    
    If you want to use a different exporter, set the `OTEL_TRACES_EXPORTER`
    environment variable. Other exporters have their own configuration settings.
-   For more information, see the [OpenTelemetry Java SDK](https://github.com/open-telemetry/opentelemetry-java/tree/v1.1.0/sdk-extensions/autoconfigure#customizing-the-opentelemetry-sdk)
-   on GitHub.
+   For more information, see the [OpenTelemetry Java SDK](https://github.com/open-telemetry/opentelemetry-java/tree/v1.1.0/sdk-extensions/autoconfigure#customizing-the-opentelemetry-sdk) on GitHub.
+   
+   Splunk provides also token-authenticated `jaeger-thrift-splunk` exporter for customers that need to use that specific protocol. In order to use it, please set (example endpoint value for SmartAgent):
+   ```
+    OTEL_TRACES_EXPORTER=jaeger-thrift-splunk
+    OTEL_EXPORTER_JAEGER_ENDPOINT=http://127.0.0.1:9080/v1/trace
+    SPLUNK_AUTH_TOKEN="orgAccessToken"
+   ``` 
+   
 7. Set the environment in Splunk APM for the service with the
    `OTEL_RESOURCE_ATTRIBUTES` environment variable:
    ```

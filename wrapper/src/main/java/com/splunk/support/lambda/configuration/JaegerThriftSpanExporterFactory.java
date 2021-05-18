@@ -16,6 +16,8 @@
 
 package com.splunk.support.lambda.configuration;
 
+import static com.splunk.support.lambda.configuration.SplunkConfiguration.SPLUNK_ACCESS_TOKEN;
+
 import com.google.auto.service.AutoService;
 import io.jaegertracing.thrift.internal.senders.HttpSender;
 import io.opentelemetry.exporter.jaeger.thrift.JaegerThriftSpanExporter;
@@ -31,7 +33,6 @@ import org.slf4j.LoggerFactory;
 public class JaegerThriftSpanExporterFactory implements ConfigurableSpanExporterProvider {
   private static final Logger log = LoggerFactory.getLogger(JaegerThriftSpanExporterFactory.class);
 
-  static final String SIGNALFX_AUTH_TOKEN = "signalfx.auth.token";
   public static final String OTEL_EXPORTER_JAEGER_ENDPOINT = "otel.exporter.jaeger.endpoint";
 
   @Override
@@ -39,7 +40,7 @@ public class JaegerThriftSpanExporterFactory implements ConfigurableSpanExporter
     JaegerThriftSpanExporterBuilder builder = JaegerThriftSpanExporter.builder();
 
     String endpoint = config.getString(OTEL_EXPORTER_JAEGER_ENDPOINT);
-    String token = config.getString(SIGNALFX_AUTH_TOKEN);
+    String token = config.getString(SPLUNK_ACCESS_TOKEN);
     if (token != null && !token.isEmpty()) {
       log.debug("Using authenticated jaeger-thrift exporter");
       builder.setThriftSender(
