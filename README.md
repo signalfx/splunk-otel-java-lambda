@@ -38,14 +38,14 @@
 
 # Splunk OpenTelemetry Java Lambda Wrapper
 
-The Splunk OpenTelemetry Java Lambda Wrapper is a modified version of the
+The Splunk OpenTelemetry Java Lambda is a modified version of the
 wrappers in the [OpenTelemetry AWS Lambda
 Instrumentation](https://github.com/open-telemetry/opentelemetry-java-instrumentation/tree/master/instrumentation/aws-lambda-1.0/library)
 that enables you to export spans from an AWS Lambda function with Java to
 Splunk APM without any code changes to your Lambda functions.
 
 The current release uses `OpenTelemetry AWS Lambda Instrumentation` version
-`1.1.0` and `OpenTelemetry Java SDK` version `1.1.0`.
+`0.17.0` and `OpenTelemetry Java SDK` version `0.17.1`.
 
 This Splunk distribution comes with the following defaults:
 
@@ -90,7 +90,7 @@ template. For more information, see the [example](./examples/splunk-wrapper/READ
    Gradle:
    ```
    dependencies {
-     implementation("com.signalfx.public:otel-java-lambda-wrapper:1.0.0")
+     implementation("com.signalfx.public:otel-java-lambda-wrapper:0.0.4")
    }
    ```
 
@@ -99,7 +99,7 @@ template. For more information, see the [example](./examples/splunk-wrapper/READ
    <dependency>
      <groupId>com.signalfx.public</groupId>
      <artifactId>otel-java-lambda-wrapper</artifactId>
-     <version>1.0.0</version>
+     <version>0.0.4</version>
    </dependency>
    ```
 2. From the AWS console, upload the .zip file to your Lambda function code.
