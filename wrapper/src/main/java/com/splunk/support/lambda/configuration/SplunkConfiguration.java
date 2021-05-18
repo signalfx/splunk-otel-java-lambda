@@ -16,13 +16,12 @@
 
 package com.splunk.support.lambda.configuration;
 
-import static com.splunk.support.lambda.configuration.JaegerThriftSpanExporterFactory.OTEL_EXPORTER_JAEGER_ENDPOINT;
+import static com.splunk.support.lambda.configuration.Config.getValueOrDefault;
 
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.SimpleFormatter;
-import java.util.regex.Pattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,20 +30,25 @@ public class SplunkConfiguration {
   private static final Logger log = LoggerFactory.getLogger(SplunkConfiguration.class);
 
   static final String OTEL_LIB_LOG_LEVEL = "OTEL_LIB_LOG_LEVEL";
-
-  private static final String DISABLED_RESOURCE_PROVIDERS =
-      String.join(
-          ",",
-          "io.opentelemetry.sdk.extension.resources.OsResourceProvider",
-          "io.opentelemetry.sdk.extension.resources.ProcessResourceProvider",
-          "io.opentelemetry.sdk.extension.aws.resource.BeanstalkResourceProvider",
-          "io.opentelemetry.sdk.extension.aws.resource.Ec2ResourceProvider",
-          "io.opentelemetry.sdk.extension.aws.resource.EcsResourceProvider",
-          "io.opentelemetry.sdk.extension.aws.resource.EksResourceProvider");
+  static final String SPLUNK_ACCESS_TOKEN = "splunk.access.token";
 
   public static void configure() {
-    setDefaults();
+    ConfigValidator.validate();
+    DefaultConfiguration.applyDefaults();
     configureOtelLogging();
+    addSplunkAccessTokenToOtlpHeadersIfNeeded();
+  }
+
+  private static void addSplunkAccessTokenToOtlpHeadersIfNeeded() {
+    String accessToken = getValueOrDefault(SPLUNK_ACCESS_TOKEN);
+    String tracesExporter = getValueOrDefault("otel.traces.exporter");
+
+    if ("otlp".equals(tracesExporter) && !accessToken.isEmpty()) {
+      String userOtlpHeaders = getValueOrDefault("otel.exporter.otlp.headers");
+      String otlpHeaders =
+          (userOtlpHeaders.isEmpty() ? "" : userOtlpHeaders + ",") + "X-SF-TOKEN=" + accessToken;
+      System.setProperty("otel.exporter.otlp.headers", otlpHeaders);
+    }
   }
 
   private static void configureOtelLogging() {
@@ -71,41 +75,5 @@ public class SplunkConfiguration {
       }
     }
     return Level.WARNING;
-  }
-
-  private static void setDefaults() {
-    // by default no metrics are exported
-    setDefaultValue("otel.metrics.exporter", "none");
-
-    // jaeger-thrift defaults
-    setDefaultValue("otel.traces.exporter", "jaeger-thrift-splunk");
-    setDefaultValue(OTEL_EXPORTER_JAEGER_ENDPOINT, "http://localhost:9080/v1/trace");
-    setDefaultValue("otel.resource.attributes", "service.name=OtelInstrumentedLambda");
-
-    // B3 propagation
-    setDefaultValue("otel.propagators", "b3");
-
-    // sample ALL
-    setDefaultValue("otel.traces.sampler", "always_on");
-
-    // disable non-lambda resource providers
-    setDefaultValue("otel.java.disabled.resource.providers", DISABLED_RESOURCE_PROVIDERS);
-  }
-
-  private static void setDefaultValue(String name, String value) {
-    if (!isConfigured(name)) {
-      log.info("Setting default value. name={}, value={}", name, value);
-      System.setProperty(name, value);
-    }
-  }
-
-  private static boolean isConfigured(String name) {
-    return (System.getProperty(name) != null || System.getenv(toEnvVarName(name)) != null);
-  }
-
-  private static final Pattern ENV_REPLACEMENT = Pattern.compile("[^a-zA-Z0-9_]");
-
-  private static String toEnvVarName(String propertyName) {
-    return ENV_REPLACEMENT.matcher(propertyName.toUpperCase()).replaceAll("_");
   }
 }
