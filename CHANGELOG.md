@@ -29,7 +29,7 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Upstream OpenTelemetry Java Instrumentation 0.14.0 contains an issue that prevents HTTP context propagation. Therefore, only XRay context propagation works currently.
 
 ### Enhancements
-- "always on" sampler configured - all spans will be always exported (no matter sampling)
+- "always on" sampler configured - all spans will be always exported
 - Removed HTTP interceptor logging
 
 ------
@@ -58,4 +58,3 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Provides exporter configuration via env props.
 - Supports direct Splunk cloud ingest via Jaeger / Thrift over http exporter.
   
-
