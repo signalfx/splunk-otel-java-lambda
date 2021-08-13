@@ -6,7 +6,7 @@
     <groupId>com.signalfx.public</groupId>
     <artifactId>otel-java-lambda-wrapper</artifactId>
     <packaging>jar</packaging>
-    <version>0.0.5</version>
+    <version>0.1.0-SNAPSHOT</version>
     <name>Splunk OTEL-based Lambda Wrapper</name>
     <description>
         Splunk release of the OpenTelemetry Java Lambda Wrapper
