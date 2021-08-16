@@ -7,12 +7,15 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.0.5] - 13.08.2021
+
 ### General
 - Updated to the newest OpenTelemetry Java Instrumentation [v1.1.0](https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/tag/v1.1.0) and OpenTelemetry Java SDK [v1.1.0](https://github.com/open-telemetry/opentelemetry-java/releases/tag/v1.1.0).
 
 ### Enhancements
 - Configured the OTEL wrapper example to disable not needed resource providers.
 - Configured disabled resource providers to match OTEL format (`ResourceProvider` instead of `Resource`).
+- added support for SQS Event wrapper.
 
 -----
 ## [0.0.4] - 04.03.2021
