@@ -115,6 +115,7 @@ template. For more information, see the [example](./examples/splunk-wrapper/READ
    | `com.splunk.support.lambda.TracingRequestWrapper` | Wrap a regular handler. |
    | `com.splunk.support.lambda.TracingRequestApiGatewayWrapper` | Wrap a regular handler proxied through an API Gateway. |
    | `com.splunk.support.lambda.TracingRequestStreamWrapper` | Wrap a streaming handler and enable HTTP context propagation for HTTP requests. |
+   | `com.splunk.support.lambda.TracingSqsEventWrapper` | Wrap an AWS SQS Event handler. |
 
    For more information about setting a handler for your Lambda function in the AWS console, see [Configuring functions in the console](https://docs.aws.amazon.com/lambda/latest/dg/configuration-console.html) on the AWS website.
 4. Set the `OTEL_INSTRUMENTATION_AWS_LAMBDA_HANDLER` environment variable in your Lambda function
