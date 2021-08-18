@@ -15,7 +15,9 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Enhancements
 - Configured the OTEL wrapper example to disable not needed resource providers.
 - Configured disabled resource providers to match OTEL format (`ResourceProvider` instead of `Resource`).
-- added support for SQS Event wrapper.
+- Added support for SQS Event wrapper.
+- Changed auth token property name to `SPLUNK_ACCESS_TOKEN`.
+- Changed the name of Splunk's exporter to `jaeger-thrift-splunk`.
 
 -----
 ## [0.0.4] - 04.03.2021

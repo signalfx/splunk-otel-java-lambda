@@ -138,7 +138,7 @@ template. For more information, see the [example](./examples/splunk-wrapper/READ
    variables in your Lambda function code:
    ```
    OTEL_EXPORTER_OTLP_ENDPOINT="http://yourEndpoint:4317"
-   SPLUNK_AUTH_TOKEN="orgAccessToken"
+   SPLUNK_ACCESS_TOKEN="orgAccessToken"
    ```
    Also, you can set span flush wait timeout, that is max time the function will wait for the spans to be ingested by the Splunk APM. Default is 1 second. 
    Timeout is controlled with a following property (value in milliseconds):
@@ -154,7 +154,7 @@ template. For more information, see the [example](./examples/splunk-wrapper/READ
    ```
     OTEL_TRACES_EXPORTER=jaeger-thrift-splunk
     OTEL_EXPORTER_JAEGER_ENDPOINT=http://127.0.0.1:9080/v1/trace
-    SPLUNK_AUTH_TOKEN="orgAccessToken"
+    SPLUNK_ACCESS_TOKEN="orgAccessToken"
    ``` 
    
 7. Set the environment in Splunk APM for the service with the
