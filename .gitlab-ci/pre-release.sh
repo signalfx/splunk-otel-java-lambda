@@ -10,8 +10,12 @@ then
   exit 1
 fi
 
+cd github-clone
+
+echo "Preparing release $1"
+
 current_dev=`mvn help:evaluate -Dexpression=project.version -q -DforceStdout -f wrapper/pom.xml`
-current_release=`cat .github/release.properties | grep "current.release=" | cut -c17-`
+current_release=`cat .gitlab-ci/release.properties | grep "current.release=" | cut -c17-`
 next_release=$1
 
 echo "Current release: $current_release"
@@ -23,5 +27,5 @@ sed -i "s/$current_release/$next_release/" ./README.md
 sed -i "s/$current_release/$next_release/" ./outbound-context-propagation.md
 sed -i -r "s/(wrapper:\s')$current_dev/\1$next_release/" ./examples/build.gradle
 
+echo "Creating commit with pre-release changes..."
 git commit -a -m "preparing release $next_release"
-git tag -a "v$next_release" -m "release $next_release"

@@ -1,6 +1,6 @@
 ## Releasing a new version
 
-[This GitHub Action](.github/workflows/release.yaml) builds, and releases a new version of the wrapper to both Maven Central and Github whenever a new "RC" tag is pushed to the repository.
+Special Splunk op builds and releases a new version of the wrapper to both Maven Central and Github whenever a new "RC" tag is pushed to the repository.
 
 Release tag format should be `rc<RELEASE VERSION>`.
 
