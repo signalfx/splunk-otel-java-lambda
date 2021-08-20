@@ -1,6 +1,6 @@
 ## Releasing a new version
 
-[This GitHub Action](.github/workflows/release.yaml) builds, and releases a new version of the wrapper to both Maven Central and Github whenever a new "RC" tag is pushed to the repository.
+Internal Splunk build releases a new version of the wrapper to both Maven Central and Github whenever a new "RC" tag is pushed to the repository.
 
 Release tag format should be `rc<RELEASE VERSION>`.
 
@@ -22,7 +22,6 @@ Full release procedure is as follows:
 * PR will need to be reviewed and merged by either approvers or maintainers 
 
 After the release is completed successfully, the following should happen:
-* Github release tag (`v<VERSION>`) created
 * Github release published
 * Two commits created, reflecting preparation for the release and next development cycle
 * Central Maven repo updated with the new release of `com.signalfx.public:otel-java-lambda-wrapper`  
