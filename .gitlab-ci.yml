@@ -1,0 +1,20 @@
+image:
+  name: "maven:3-jdk-8"
+
+stages:
+  - release
+
+release:
+  stage: release
+  rules:
+    - if: '$CI_COMMIT_TAG =~ /^rc[0-9]+\.[0-9]+\.[0-9]+.*/'
+  script:
+    - export VERSION=${CI_COMMIT_TAG:2} && echo "Release version used $VERSION"
+    - export NEXT=$(perl -pe 's/^((\d+\.)*)(\d+)(.*)$/$1.($3+1).$4/e' <<< "$VERSION") && echo "Next development version $NEXT"
+    - export DEBUG=true
+    - export GH_REPO=signalfx/splunk-otel-java-lambda
+    - .gitlab-ci/setup-tooling.sh
+    - .gitlab-ci/setup-github.sh ${VERSION}
+    - .gitlab-ci/pre-release.sh ${VERSION}
+    - .gitlab-ci/release-binaries.sh ${VERSION}
+    - .gitlab-ci/post-release.sh ${VERSION} ${NEXT}-SNAPSHOT
