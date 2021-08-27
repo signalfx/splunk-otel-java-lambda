@@ -45,7 +45,7 @@ that enables you to export spans from an AWS Lambda function with Java to
 Splunk APM without any code changes to your Lambda functions.
 
 The current release uses `OpenTelemetry AWS Lambda Instrumentation` version
-`0.17.0` and `OpenTelemetry Java SDK` version `0.17.1`.
+`1.1.0` and `OpenTelemetry Java SDK` version `1.1.0`.
 
 This Splunk distribution comes with the following defaults:
 
