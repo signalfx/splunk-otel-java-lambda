@@ -1,1 +1,12 @@
-*       @kubawach @mateuszrzeszutek @signalfx/gdi-instrumentation-java
+* @kubawach @mateuszrzeszutek @signalfx/gdi-instrumentation-java
+
+#####################################################
+#
+# Docs reviewers
+#
+#####################################################
+
+*.md    @kubawach @mateuszrzeszutek @signalfx/gdi-instrumentation-java @signalfx/docs
+*.rst   @kubawach @mateuszrzeszutek @signalfx/gdi-instrumentation-java @signalfx/docs
+docs/   @kubawach @mateuszrzeszutek @signalfx/gdi-instrumentation-java @signalfx/docs
+README* @kubawach @mateuszrzeszutek @signalfx/gdi-instrumentation-java @signalfx/docs
