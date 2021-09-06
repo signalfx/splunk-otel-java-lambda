@@ -1,1 +1,12 @@
-*       @kubawach @mateuszrzeszutek @signalfx/gdi-instrumentation-java
+* @signalfx/gdi-java-maintainers @signalfx/gdi-java-approvers @signalfx/gdi-instrumentation-java
+
+#####################################################
+#
+# Docs reviewers
+#
+#####################################################
+
+*.md    @signalfx/gdi-java-maintainers @signalfx/gdi-java-approvers @signalfx/gdi-instrumentation-java @signalfx/docs
+*.rst   @signalfx/gdi-java-maintainers @signalfx/gdi-java-approvers @signalfx/gdi-instrumentation-java @signalfx/docs
+docs/   @signalfx/gdi-java-maintainers @signalfx/gdi-java-approvers @signalfx/gdi-instrumentation-java @signalfx/docs
+README* @signalfx/gdi-java-maintainers @signalfx/gdi-java-approvers @signalfx/gdi-instrumentation-java @signalfx/docs
