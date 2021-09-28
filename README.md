@@ -156,7 +156,14 @@ template. For more information, see the [example](./examples/splunk-wrapper/READ
     OTEL_EXPORTER_JAEGER_ENDPOINT=http://127.0.0.1:9080/v1/trace
     SPLUNK_ACCESS_TOKEN="orgAccessToken"
    ``` 
-   
+   You can also use the `jaeger-thrift-splunk' exporter to send spans directly to the Splunk Observability Cloud backend. You can update accomplish this by updating OTEL_EXPORTER_JAEGER_ENDPOINT to the ingest URL.
+
+   ```
+    OTEL_TRACES_EXPORTER=jaeger-thrift-splunk
+    OTEL_EXPORTER_JAEGER_ENDPOINT=https://ingest.<realm>.signalfx.com/v2/trace
+    SPLUNK_ACCESS_TOKEN="orgAccessToken"
+   ``` 
+
 7. Set the environment in Splunk APM for the service with the
    `OTEL_RESOURCE_ATTRIBUTES` environment variable:
    ```
