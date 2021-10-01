@@ -17,6 +17,7 @@
 package com.splunk.support.lambda.configuration;
 
 import static com.splunk.support.lambda.configuration.SplunkConfiguration.SPLUNK_ACCESS_TOKEN;
+import static io.opentelemetry.api.internal.StringUtils.isNullOrEmpty;
 
 import com.google.auto.service.AutoService;
 import io.jaegertracing.thrift.internal.senders.HttpSender;
@@ -35,13 +36,27 @@ public class JaegerThriftSpanExporterFactory implements ConfigurableSpanExporter
 
   public static final String OTEL_EXPORTER_JAEGER_ENDPOINT = "otel.exporter.jaeger.endpoint";
 
+  // http://localhost:9080/v1/trace is the default endpoint for SmartAgent
+  // http://localhost:14268/api/traces is the default endpoint for otel-collector
+  private static final String OTEL_EXPORTER_JAEGER_ENDPOINT_DEFAULT =
+      "http://127.0.0.1:9080/v1/trace";
+
   @Override
   public SpanExporter createExporter(ConfigProperties config) {
     JaegerThriftSpanExporterBuilder builder = JaegerThriftSpanExporter.builder();
 
     String endpoint = config.getString(OTEL_EXPORTER_JAEGER_ENDPOINT);
+    if (isNullOrEmpty(endpoint)) {
+      endpoint = OTEL_EXPORTER_JAEGER_ENDPOINT_DEFAULT;
+      log.debug(
+          "Using default value for OTEL_EXPORTER_JAEGER_ENDPOINT={}",
+          OTEL_EXPORTER_JAEGER_ENDPOINT_DEFAULT);
+    }
     String token = config.getString(SPLUNK_ACCESS_TOKEN);
-    if (token != null && !token.isEmpty()) {
+    if (isNullOrEmpty(token)) {
+      log.debug("Using jaeger-thrift exporter without authentication");
+      builder.setEndpoint(endpoint);
+    } else {
       log.debug("Using authenticated jaeger-thrift exporter");
       builder.setThriftSender(
           new HttpSender.Builder(endpoint)
@@ -50,11 +65,7 @@ public class JaegerThriftSpanExporterFactory implements ConfigurableSpanExporter
                       .addInterceptor(new AuthTokenInterceptor(token))
                       .build())
               .build());
-    } else {
-      log.debug("Using jaeger-thrift exporter without authentication");
-      builder.setEndpoint(endpoint);
     }
-
     return builder.build();
   }
 
