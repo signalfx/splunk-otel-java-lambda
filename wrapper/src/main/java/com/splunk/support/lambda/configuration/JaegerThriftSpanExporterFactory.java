@@ -49,8 +49,8 @@ public class JaegerThriftSpanExporterFactory implements ConfigurableSpanExporter
     if (isNullOrEmpty(endpoint)) {
       endpoint = OTEL_EXPORTER_JAEGER_ENDPOINT_DEFAULT;
       log.debug(
-          "Using default value for OTEL_EXPORTER_JAEGER_ENDPOINT="
-              + OTEL_EXPORTER_JAEGER_ENDPOINT_DEFAULT);
+          "Using default value for OTEL_EXPORTER_JAEGER_ENDPOINT={}",
+          OTEL_EXPORTER_JAEGER_ENDPOINT_DEFAULT);
     }
     String token = config.getString(SPLUNK_ACCESS_TOKEN);
     if (isNullOrEmpty(token)) {
