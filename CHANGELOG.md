@@ -7,6 +7,14 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.0.6] - 01.10.2021
+
+### Bugfixes
+- Fixed issue with missing `opentelemetry-extension-aws` module, preventing trace propagation from XRay.
+
+### Enhancements
+- Set `jaeger-thrift-splunk` endpoint URL default value, enabling usage of the library even with generic wrappers. 
+
 ## [0.0.5] - 13.08.2021
 
 ### General

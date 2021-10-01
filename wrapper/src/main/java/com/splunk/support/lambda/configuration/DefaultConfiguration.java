@@ -17,7 +17,6 @@
 package com.splunk.support.lambda.configuration;
 
 import static com.splunk.support.lambda.configuration.Config.setDefaultValue;
-import static com.splunk.support.lambda.configuration.JaegerThriftSpanExporterFactory.OTEL_EXPORTER_JAEGER_ENDPOINT;
 
 public class DefaultConfiguration {
 
@@ -38,10 +37,6 @@ public class DefaultConfiguration {
 
     setDefaultValue("otel.propagators", "tracecontext,baggage");
     setDefaultValue("otel.traces.exporter", "otlp");
-    // http://localhost:9080/v1/trace is the default endpoint for SmartAgent
-    // http://localhost:14268/api/traces is the default endpoint for otel-collector
-    // jaeger-thrift defaults - if configured by the customer
-    setDefaultValue(OTEL_EXPORTER_JAEGER_ENDPOINT, "http://127.0.0.1:9080/v1/trace");
 
     // sample ALL
     setDefaultValue("otel.traces.sampler", "always_on");
