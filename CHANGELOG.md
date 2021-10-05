@@ -7,7 +7,7 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
-## [0.0.6] - 01.10.2021
+## [0.0.10] - 2021-10-05
 
 ### Bugfixes
 - Fixed issue with missing `opentelemetry-extension-aws` module, preventing trace propagation from XRay.
@@ -15,7 +15,7 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Enhancements
 - Set `jaeger-thrift-splunk` endpoint URL default value, enabling usage of the library even with generic wrappers. 
 
-## [0.0.5] - 13.08.2021
+## [0.0.5] - 2021-08-13
 
 ### General
 - Updated to the newest OpenTelemetry Java Instrumentation [v1.1.0](https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/tag/v1.1.0) and OpenTelemetry Java SDK [v1.1.0](https://github.com/open-telemetry/opentelemetry-java/releases/tag/v1.1.0).
@@ -28,13 +28,13 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Changed the name of Splunk's exporter to `jaeger-thrift-splunk`.
 
 -----
-## [0.0.4] - 04.03.2021
+## [0.0.4] - 2021-03-04
 
 ### General
 - Updated to the newest OpenTelemetry Java Instrumentation [v0.17.0](https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/tag/v0.17.0) and OpenTelemetry Java SDK [v0.17.1](https://github.com/open-telemetry/opentelemetry-java/releases/tag/v0.17.1).
 
 -----
-## [0.0.3] - 28.01.2021
+## [0.0.3] - 2021-01-28
 
 ### General
 - Updated README.md with current env var names
@@ -46,7 +46,7 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Removed HTTP interceptor logging
 
 ------
-## [0.0.2] - 26.01.2021
+## [0.0.2] - 2021-01-26
 
 ### General
 - Updated to the newest OpenTelemetry Java Instrumentation [v0.14.0](https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/tag/v0.14.0) and OpenTelemetry Java SDK [v0.14.1](https://github.com/open-telemetry/opentelemetry-java/releases/tag/v0.14.1).
@@ -58,7 +58,7 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Added support for additional W3CBaggagePropagator (`baggage`).
 
 ------
-## [0.0.1] - 28.12.2020
+## [0.0.1] - 2020-12-28
 
 ### General
 - First release of the wrapper. 
@@ -70,4 +70,3 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Provides propagator configuration via env props.
 - Provides exporter configuration via env props.
 - Supports direct Splunk cloud ingest via Jaeger / Thrift over http exporter.
-  
