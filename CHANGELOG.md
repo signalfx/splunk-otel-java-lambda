@@ -7,6 +7,15 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.0.11] - 2021-10-06
+
+### Bugfixes
+- Fixed issue with AWS lambda logging dependencies not included if the wrapper is used as a direct dependency
+
+### Enhancements
+- Added info message if logging exporter is installed for debug purposes
+- Default value of the configuration property `otel.lib.log.level` set to `INFO`
+
 ## [0.0.10] - 2021-10-05
 
 ### Bugfixes

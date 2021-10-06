@@ -17,6 +17,8 @@
 package com.splunk.support.lambda.configuration;
 
 import static com.splunk.support.lambda.configuration.Config.setDefaultValue;
+import static com.splunk.support.lambda.configuration.Names.OTEL_LIB_LOG_LEVEL;
+import static com.splunk.support.lambda.configuration.Names.OTEL_TRACES_EXPORTER;
 
 public class DefaultConfiguration {
 
@@ -36,12 +38,15 @@ public class DefaultConfiguration {
     setDefaultValue("otel.metrics.exporter", "none");
 
     setDefaultValue("otel.propagators", "tracecontext,baggage");
-    setDefaultValue("otel.traces.exporter", "otlp");
+    setDefaultValue(OTEL_TRACES_EXPORTER, "otlp");
 
     // sample ALL
     setDefaultValue("otel.traces.sampler", "always_on");
 
     // disable non-lambda resource providers
     setDefaultValue("otel.java.disabled.resource.providers", DISABLED_RESOURCE_PROVIDERS);
+
+    // default info logging for otel libs
+    setDefaultValue(OTEL_LIB_LOG_LEVEL, "INFO");
   }
 }

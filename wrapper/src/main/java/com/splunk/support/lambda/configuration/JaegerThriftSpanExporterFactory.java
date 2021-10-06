@@ -16,7 +16,7 @@
 
 package com.splunk.support.lambda.configuration;
 
-import static com.splunk.support.lambda.configuration.SplunkConfiguration.SPLUNK_ACCESS_TOKEN;
+import static com.splunk.support.lambda.configuration.Names.SPLUNK_ACCESS_TOKEN;
 import static io.opentelemetry.api.internal.StringUtils.isNullOrEmpty;
 
 import com.google.auto.service.AutoService;
