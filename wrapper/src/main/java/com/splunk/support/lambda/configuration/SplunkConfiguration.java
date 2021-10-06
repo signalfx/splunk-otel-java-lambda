@@ -16,8 +16,13 @@
 
 package com.splunk.support.lambda.configuration;
 
-import static com.splunk.support.lambda.configuration.Config.getValueOrDefault;
+import static com.splunk.support.lambda.configuration.Config.getValue;
+import static com.splunk.support.lambda.configuration.Names.OTEL_EXPORTER_OTLP_HEADERS;
+import static com.splunk.support.lambda.configuration.Names.OTEL_LIB_LOG_LEVEL;
+import static com.splunk.support.lambda.configuration.Names.OTEL_TRACES_EXPORTER;
+import static com.splunk.support.lambda.configuration.Names.SPLUNK_ACCESS_TOKEN;
 
+import io.opentelemetry.api.internal.StringUtils;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Handler;
 import java.util.logging.Level;
@@ -29,9 +34,6 @@ public class SplunkConfiguration {
 
   private static final Logger log = LoggerFactory.getLogger(SplunkConfiguration.class);
 
-  static final String OTEL_LIB_LOG_LEVEL = "OTEL_LIB_LOG_LEVEL";
-  static final String SPLUNK_ACCESS_TOKEN = "splunk.access.token";
-
   public static void configure() {
     ConfigValidator.validate();
     DefaultConfiguration.applyDefaults();
@@ -40,14 +42,14 @@ public class SplunkConfiguration {
   }
 
   private static void addSplunkAccessTokenToOtlpHeadersIfNeeded() {
-    String accessToken = getValueOrDefault(SPLUNK_ACCESS_TOKEN);
-    String tracesExporter = getValueOrDefault("otel.traces.exporter");
+    String accessToken = getValue(SPLUNK_ACCESS_TOKEN);
+    String tracesExporter = getValue(OTEL_TRACES_EXPORTER);
 
     if ("otlp".equals(tracesExporter) && !accessToken.isEmpty()) {
-      String userOtlpHeaders = getValueOrDefault("otel.exporter.otlp.headers");
+      String userOtlpHeaders = getValue(OTEL_EXPORTER_OTLP_HEADERS);
       String otlpHeaders =
           (userOtlpHeaders.isEmpty() ? "" : userOtlpHeaders + ",") + "X-SF-TOKEN=" + accessToken;
-      System.setProperty("otel.exporter.otlp.headers", otlpHeaders);
+      System.setProperty(OTEL_EXPORTER_OTLP_HEADERS, otlpHeaders);
     }
   }
 
@@ -66,8 +68,8 @@ public class SplunkConfiguration {
   }
 
   private static Level getOtelLibLogLevel() {
-    String level = System.getenv(OTEL_LIB_LOG_LEVEL);
-    if (level != null) {
+    String level = Config.getValue(OTEL_LIB_LOG_LEVEL);
+    if (!StringUtils.isNullOrEmpty(level)) {
       try {
         return Level.parse(level);
       } catch (IllegalArgumentException iae) {

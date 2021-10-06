@@ -16,7 +16,7 @@
 
 package com.splunk.support.lambda.configuration;
 
-import static com.splunk.support.lambda.configuration.Config.getValueOrDefault;
+import static com.splunk.support.lambda.configuration.Config.getValue;
 
 import io.opentelemetry.semconv.resource.attributes.ResourceAttributes;
 import org.slf4j.Logger;
@@ -27,7 +27,7 @@ public class ConfigValidator {
   private static final Logger log = LoggerFactory.getLogger(ConfigValidator.class);
 
   static void validate() {
-    String resourceAttributes = getValueOrDefault("otel.resource.attributes");
+    String resourceAttributes = getValue("otel.resource.attributes");
     if (!resourceAttributes.contains(ResourceAttributes.SERVICE_NAME.getKey())) {
       log.warn(
           "Resource attribute 'service.name' is not set: your service is unnamed and will be difficult to identify."

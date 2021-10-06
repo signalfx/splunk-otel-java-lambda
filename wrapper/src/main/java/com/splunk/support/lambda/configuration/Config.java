@@ -35,7 +35,7 @@ class Config {
     return (System.getProperty(name) != null || System.getenv(toEnvVarName(name)) != null);
   }
 
-  static String getValueOrDefault(String name) {
+  static String getValue(String name) {
 
     String result = System.getProperty(name);
     if (result == null) {
