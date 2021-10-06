@@ -17,7 +17,7 @@ The class provides single static method - `createHeaders`, which returns name-to
    - for example:
    ```
       dependencies {
-        compileOnly('com.signalfx.public:otel-java-lambda-wrapper:0.0.10')
+        compileOnly('com.signalfx.public:otel-java-lambda-wrapper:0.0.11')
       }
    ```
 
