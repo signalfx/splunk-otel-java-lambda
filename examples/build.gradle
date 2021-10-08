@@ -29,14 +29,7 @@ subprojects {
     }
 
     repositories {
-        jcenter()
         mavenLocal()
         mavenCentral()
-        maven {
-            url "https://dl.bintray.com/open-telemetry/maven"
-        }
-        maven {
-            url "https://oss.jfrog.org/libs-snapshot"
-        }
     }
 }

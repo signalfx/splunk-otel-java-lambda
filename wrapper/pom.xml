@@ -341,18 +341,4 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
-    <repositories>
-        <repository>
-            <id>jfrog-oss</id>
-            <url>https://oss.jfrog.org/libs-snapshot</url>
-            <snapshots></snapshots>
-            <releases></releases>
-        </repository>
-        <repository>
-            <id>bintray</id>
-            <url>https://dl.bintray.com/open-telemetry/maven</url>
-            <releases></releases>
-        </repository>
-    </repositories>
 </project>
