@@ -18,7 +18,7 @@ Resources:
       Timeout: 60
       MemorySize: 256
       Layers:
-        - arn:aws:lambda:us-east-2:254067382080:layer:otel-lambda-java-wrapper:30
+        - arn:aws:lambda:us-east-2:254067382080:layer:otel-lambda-java-wrapper:32
       Environment:
         Variables:
           OTEL_INSTRUMENTATION_AWS_LAMBDA_HANDLER: com.splunk.support.lambda.examples.RequestFunction::handleRequest
