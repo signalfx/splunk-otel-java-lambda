@@ -4,7 +4,7 @@
   <strong>
     <a href="#getting-started">Getting Started</a>
     &nbsp;&nbsp;&bull;&nbsp;&nbsp;
-    <a href="CONTRIBUTING.md">Getting Involved</a>
+    <a href="CONTRIBUTING.md">Contributing</a>
     &nbsp;&nbsp;&bull;&nbsp;&nbsp;
     <a href="#license">License</a>
     &nbsp;&nbsp;&bull;&nbsp;&nbsp;
@@ -30,7 +30,7 @@
     &nbsp;&nbsp;&bull;&nbsp;&nbsp;
     <a href="#logging">Logging</a>
     &nbsp;&nbsp;&bull;&nbsp;&nbsp;
-    <a href="#aws-span-tags-the-wrapper-adds-to-trace-data">AWS span tags</a>
+    <a href="#examples">Examples</a>
   </strong>
 </p>
 
@@ -213,7 +213,7 @@ information, see the [OpenTelemetry Specification](https://github.com/open-telem
 | `faas.execution`                             | `af9d5aa4-a685-4c5f-a22b-444f80b3cc28`                                              | The AWS request ID.                                                                       |
 | `faas.id`                                    | `arn:aws:lambda:us-west-2:123456789012:function:my-lambda-function`                 | The ARN of the Lambda function instance.                                                  |
 | `faas.name`                                  | `my-lambda-function`                                                                | The Lambda function name.                                                                 |
-| `faas.trigger`                               | `http`                                                                        | The type of trigger the function executed on. Only for the API gateway proxy.             |
+| `faas.trigger`                               | `http`                                                                              | The type of trigger the function executed on. Only for the API gateway proxy.             |
 | `faas.version`                               | `2.0.0`                                                                             | The Lambda function version.                                                              |
 | `http.method`                                | `GET`, `POST`, `HEAD`                                                               | The HTTP request method. Only for the API gateway proxy.                                  |
 | `http.url`                                   | `https://www.foo.bar/search?q=OpenTelemetry#SemConv`                                | The full HTTP request URL. Only for the API gateway proxy.                                |
@@ -229,6 +229,17 @@ These environment variables control logging:
 | -------------------- | ----------- |
 | `OTEL_LIB_LOG_LEVEL` | Controls logging for the OpenTelemetry library. By default, it's set to `WARNING` and uses `java.util.logging` values. |
 | `OTEL_LAMBDA_LOG_LEVEL` | Controls logging of the Splunk Lambda wrapper. By default, it's set to `WARN` and uses `log4j2` values.
+
+## Examples
+
+There are several examples provided in the `/examples` folder, grouped in following subfolders:
+- `otel-wrapper` - examples using OpenTelemetry wrappers directly
+- `splunk-layer` - examples using OpenTelemetry wrappers enhanced by Splunk, added as an AWS layer
+- `splunk-wrapper` - examples using OpenTelemetry wrappers enhanced by Splunk, added as a direct dependency
+
+Each group provides an AWS `template.yaml` to facilitate deployment and an extensive `README` documenting example calls with a relevant payload (in most cases - a simple string).
+
+Refer to particular `README` files to check the details of provided examples.
 
 ## License
 
