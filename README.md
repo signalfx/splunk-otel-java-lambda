@@ -4,7 +4,7 @@
   <strong>
     <a href="#getting-started">Getting Started</a>
     &nbsp;&nbsp;&bull;&nbsp;&nbsp;
-    <a href="CONTRIBUTING.md">Getting Involved</a>
+    <a href="CONTRIBUTING.md">Contributing</a>
     &nbsp;&nbsp;&bull;&nbsp;&nbsp;
     <a href="#license">License</a>
     &nbsp;&nbsp;&bull;&nbsp;&nbsp;
@@ -30,7 +30,7 @@
     &nbsp;&nbsp;&bull;&nbsp;&nbsp;
     <a href="#logging">Logging</a>
     &nbsp;&nbsp;&bull;&nbsp;&nbsp;
-    <a href="#aws-span-tags-the-wrapper-adds-to-trace-data">AWS span tags</a>
+    <a href="#examples">Examples</a>
   </strong>
 </p>
 
@@ -220,7 +220,6 @@ information, see the [OpenTelemetry Specification](https://github.com/open-telem
 | `http.user_agent`                            | `CERN-LineMode/2.15 libwww/2.17b3`                                                  | The value of the HTTP user-agent header the client sends. Only for the API gateway proxy. |
 | `otel.library.name`                          | `io.opentelemetry.aws-lambda`                                                       | The SignalFx function wrapper qualifier.                                                  |
 | `process.runtime.{name,version,description}` | `OpenJDK Runtime Environment,14.0.2,Eclipse OpenJ9 Eclipse OpenJ9 VM openj9-0.21.0` | The AWS execution environment.                                                            |
-
 ## Logging
 
 These environment variables control logging:
@@ -229,6 +228,17 @@ These environment variables control logging:
 | -------------------- | ----------- |
 | `OTEL_LIB_LOG_LEVEL` | Controls logging for the OpenTelemetry library. By default, it's set to `WARNING` and uses `java.util.logging` values. |
 | `OTEL_LAMBDA_LOG_LEVEL` | Controls logging of the Splunk Lambda wrapper. By default, it's set to `WARN` and uses `log4j2` values.
+
+## Examples
+
+There are several examples provided in the `/examples` folder, grouped in following subfolders:
+- `otel-wrapper` - examples using OpenTelemetry wrappers directly
+- `splunk-layer` - examples using OpenTelemetry wrappers enhanced by Splunk, added by AWS layer
+- `splunk-wrapper` - examples using OpenTelemetry wrappers enhanced by Splunk, added as a direct dependency
+
+Each group provides AWS `template.yaml` to facilitate deployment and extensive `README` documenting example calls with a relevant payload (in most cases - a simple string).
+
+Refer to particular `README` files to check the details of provided examples.
 
 ## License
 
