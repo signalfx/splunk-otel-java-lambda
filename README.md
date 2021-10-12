@@ -236,7 +236,7 @@ There are several examples provided in the `/examples` folder, grouped in follow
 - `splunk-layer` - examples using OpenTelemetry wrappers enhanced by Splunk, added by AWS layer
 - `splunk-wrapper` - examples using OpenTelemetry wrappers enhanced by Splunk, added as a direct dependency
 
-Each group provides AWS `template.yaml` to facilitate deployment and extensive `README` documenting example calls with a relevant payload (in most cases - a simple string).
+Each group provides an AWS `template.yaml` to facilitate deployment and an extensive `README` documenting example calls with a relevant payload (in most cases - a simple string).
 
 Refer to particular `README` files to check the details of provided examples.
 
