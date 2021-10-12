@@ -213,13 +213,14 @@ information, see the [OpenTelemetry Specification](https://github.com/open-telem
 | `faas.execution`                             | `af9d5aa4-a685-4c5f-a22b-444f80b3cc28`                                              | The AWS request ID.                                                                       |
 | `faas.id`                                    | `arn:aws:lambda:us-west-2:123456789012:function:my-lambda-function`                 | The ARN of the Lambda function instance.                                                  |
 | `faas.name`                                  | `my-lambda-function`                                                                | The Lambda function name.                                                                 |
-| `faas.trigger`                               | `http`                                                                        | The type of trigger the function executed on. Only for the API gateway proxy.             |
+| `faas.trigger`                               | `http`                                                                              | The type of trigger the function executed on. Only for the API gateway proxy.             |
 | `faas.version`                               | `2.0.0`                                                                             | The Lambda function version.                                                              |
 | `http.method`                                | `GET`, `POST`, `HEAD`                                                               | The HTTP request method. Only for the API gateway proxy.                                  |
 | `http.url`                                   | `https://www.foo.bar/search?q=OpenTelemetry#SemConv`                                | The full HTTP request URL. Only for the API gateway proxy.                                |
 | `http.user_agent`                            | `CERN-LineMode/2.15 libwww/2.17b3`                                                  | The value of the HTTP user-agent header the client sends. Only for the API gateway proxy. |
 | `otel.library.name`                          | `io.opentelemetry.aws-lambda`                                                       | The SignalFx function wrapper qualifier.                                                  |
 | `process.runtime.{name,version,description}` | `OpenJDK Runtime Environment,14.0.2,Eclipse OpenJ9 Eclipse OpenJ9 VM openj9-0.21.0` | The AWS execution environment.                                                            |
+
 ## Logging
 
 These environment variables control logging:
@@ -233,7 +234,7 @@ These environment variables control logging:
 
 There are several examples provided in the `/examples` folder, grouped in following subfolders:
 - `otel-wrapper` - examples using OpenTelemetry wrappers directly
-- `splunk-layer` - examples using OpenTelemetry wrappers enhanced by Splunk, added by AWS layer
+- `splunk-layer` - examples using OpenTelemetry wrappers enhanced by Splunk, added as an AWS layer
 - `splunk-wrapper` - examples using OpenTelemetry wrappers enhanced by Splunk, added as a direct dependency
 
 Each group provides an AWS `template.yaml` to facilitate deployment and an extensive `README` documenting example calls with a relevant payload (in most cases - a simple string).
