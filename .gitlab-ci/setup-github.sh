@@ -9,7 +9,7 @@ fi
 git config --global user.name releaser
 git config --global user.email releaser@users.noreply.github.com
 
-git clone https://splunk-o11y-gdi-bot:"${GITHUB_TOKEN}"@github.com/signalfx/splunk-otel-java-lambda.git github-clone
+git clone https://srv-gh-o11y-gdi:"${GITHUB_TOKEN}"@github.com/signalfx/splunk-otel-java-lambda.git github-clone
 cd github-clone
 
 echo "Preparing branch for release changes release-$1"
