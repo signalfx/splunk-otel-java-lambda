@@ -1,7 +1,7 @@
 >ℹ️&nbsp;&nbsp;SignalFx was acquired by Splunk in October 2019. See [Splunk SignalFx](https://www.splunk.com/en_us/investor-relations/acquisitions/signalfx.html) for more information.
 
 > # :warning: Deprecation Notice
-> The Splunk OpenTelemetry Java Lambda Wrapper is deprecated. Only critical security fixes and bug fixes are provided.
+> The Splunk OpenTelemetry Java Lambda Wrapper is deprecated and will reach End of Support on December 31, 2022. After that date, this repository will be archived and no longer receive updates. Until then, only critical security fixes and bug fixes will be provided.
 >
 > Going forward, Lambda functions should use the Splunk OpenTelemetry Lambda Layer, which offers similar capabilities and fully supports the OpenTelemetry standard. To learn more about the Splunk OTel Lambda Layer, see https://docs.splunk.com/Observability/gdi/get-data-in/serverless/aws/otel-lambda-layer/instrument-lambda-functions.html#nav-Instrument-your-Lambda-function
 
@@ -113,10 +113,10 @@ template. For more information, see the [example](./examples/splunk-wrapper/READ
 
    For more information, see [Deploy Java Lambda functions with .zip file archives](https://docs.aws.amazon.com/lambda/latest/dg/java-package.html)
    on the AWS website.
-3. Set a wrapper class as the handler for your Lambda function. 
+3. Set a wrapper class as the handler for your Lambda function.
 
     These wrappers are available:
-    
+
    | Wrapper class | Description |
    | ------------- | ----------- |
    | `com.splunk.support.lambda.TracingRequestWrapper` | Wrap a regular handler. |
@@ -133,43 +133,43 @@ template. For more information, see the [example](./examples/splunk-wrapper/READ
    For more information about setting environment variables in the AWS console,
    see [Using AWS Lambda environment variables](https://docs.aws.amazon.com/lambda/latest/dg/configuration-envvars.html)
    on the AWS website.
-5. By default, the Splunk Lambda wrapper uses W3C specified Trace Context and Baggage (`tracecontext,baggage`) context propagation. 
-    
+5. By default, the Splunk Lambda wrapper uses W3C specified Trace Context and Baggage (`tracecontext,baggage`) context propagation.
+
    If you want to change this, set the `OTEL_PROPAGATORS` environment variable in your
    Lambda function code. For more information about available context
    propagators, see the [Propagator settings](https://github.com/open-telemetry/opentelemetry-java/tree/v1.1.0/sdk-extensions/autoconfigure#customizing-the-opentelemetry-sdk)
    for the OpenTelemetry Java.
-6. By default, the Splunk Lambda wrapper uses the OpenTelemetry Protocol (`otlp`) exporter to send traces to Splunk APM. 
-   
+6. By default, the Splunk Lambda wrapper uses the OpenTelemetry Protocol (`otlp`) exporter to send traces to Splunk APM.
+
    If you want to use this exporter, set these environment
    variables in your Lambda function code:
    ```
    OTEL_EXPORTER_OTLP_ENDPOINT="http://yourEndpoint:4317"
    SPLUNK_ACCESS_TOKEN="orgAccessToken"
    ```
-   Also, you can set span flush wait timeout, that is max time the function will wait for the spans to be ingested by the Splunk APM. Default is 1 second. 
+   Also, you can set span flush wait timeout, that is max time the function will wait for the spans to be ingested by the Splunk APM. Default is 1 second.
    Timeout is controlled with a following property (value in milliseconds):
    ```
    OTEL_INSTRUMENTATION_AWS_LAMBDA_FLUSH_TIMEOUT: 30000
    ```
-   
+
    If you want to use a different exporter, set the `OTEL_TRACES_EXPORTER`
    environment variable. Other exporters have their own configuration settings.
    For more information, see the [OpenTelemetry Java SDK](https://github.com/open-telemetry/opentelemetry-java/tree/v1.1.0/sdk-extensions/autoconfigure#customizing-the-opentelemetry-sdk) on GitHub.
-   
+
    Splunk provides also token-authenticated `jaeger-thrift-splunk` exporter for customers that need to use that specific protocol. In order to use it, please set (example endpoint value for SmartAgent):
    ```
     OTEL_TRACES_EXPORTER=jaeger-thrift-splunk
     OTEL_EXPORTER_JAEGER_ENDPOINT=http://127.0.0.1:9080/v1/trace
     SPLUNK_ACCESS_TOKEN="orgAccessToken"
-   ``` 
+   ```
    You can also use the `jaeger-thrift-splunk` exporter to send spans directly to the Splunk Observability Cloud backend. You can accomplish this by updating OTEL_EXPORTER_JAEGER_ENDPOINT to the ingest URL.
 
    ```
     OTEL_TRACES_EXPORTER=jaeger-thrift-splunk
     OTEL_EXPORTER_JAEGER_ENDPOINT=https://ingest.<realm>.signalfx.com/v2/trace
     SPLUNK_ACCESS_TOKEN="orgAccessToken"
-   ``` 
+   ```
 
 7. Set the environment in Splunk APM for the service with the
    `OTEL_RESOURCE_ATTRIBUTES` environment variable:
@@ -251,6 +251,6 @@ Refer to particular `README` files to check the details of provided examples.
 ## License
 
 The Splunk OpenTelemetry Java Lambda Wrapper uses the
-[OpenTelemetry Instrumentation for Java](https://github.com/open-telemetry/opentelemetry-java-instrumentation), [OpenTelemetry Java SDK and extensions](https://github.com/open-telemetry/opentelemetry-java), 
+[OpenTelemetry Instrumentation for Java](https://github.com/open-telemetry/opentelemetry-java-instrumentation), [OpenTelemetry Java SDK and extensions](https://github.com/open-telemetry/opentelemetry-java),
 all released under the terms of the Apache Software License version 2.0.
 For more information, see the [license](./LICENSE) file.
