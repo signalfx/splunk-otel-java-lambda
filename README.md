@@ -252,5 +252,5 @@ Refer to particular `README` files to check the details of provided examples.
 
 The Splunk OpenTelemetry Java Lambda Wrapper uses the
 [OpenTelemetry Instrumentation for Java](https://github.com/open-telemetry/opentelemetry-java-instrumentation), [OpenTelemetry Java SDK and extensions](https://github.com/open-telemetry/opentelemetry-java),
-all released under the terms of the Apache Software License version 2.0.
+all licensed under the terms of the Apache Software License version 2.0.
 For more information, see the [license](./LICENSE) file.
