@@ -2,7 +2,7 @@ include:
   - project: 'prodsec/scp-scanning/gitlab-checkmarx'
     ref: latest
     file: '/templates/.sast_scan.yml'
-    project: 'ci-cd/templates'
+  - project: 'ci-cd/templates'
     ref: master
     file: '/prodsec/.oss-scan.yml'
 
